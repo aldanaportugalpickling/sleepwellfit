@@ -4,10 +4,515 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sleepwellfit</title>
+    <meta name="description"
+      content="Sleep Well Fit helps you track sleep, discover healthy recipes, and find exercises for a healthier lifestyle." />
+    <meta name="author" content="Aldana Andrea Portugal Pickling">
+
+
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+      
+      <!-- Main stylesheet -->
+      <link rel="stylesheet" href="/src/css/styles.css" />
+
+
+
+
+    <title>SleepWellfit - WDD330 Aldana Andrea Portugal Pickling</title>
+
   </head>
+
+
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+
+  <body>
+    <!-- =========================================================
+         HEADER / NAVIGATION
+         ========================================================= -->
+    <header class="site-header">
+      <nav class="navbar" aria-label="Main navigation">
+        <a href="#home" class="logo" data-section="home" aria-label="Sleep Well Fit home">
+          <span class="logo-icon" aria-hidden="true">☾</span>
+          <span>SLEEP WELL FIT</span>
+        </a>
+  
+        <button type="button" class="menu-toggle" aria-label="Open navigation menu" aria-expanded="false"
+          aria-controls="main-navigation">
+          <span aria-hidden="true">☰</span>
+        </button>
+  
+        <ul id="main-navigation" class="navigation-list">
+          <li>
+            <a href="#home" class="nav-link active" data-section="home">
+              Home
+            </a>
+          </li>
+  
+          <li>
+            <a href="#sleep" class="nav-link" data-section="sleep">
+              Sleep
+            </a>
+          </li>
+  
+          <li>
+            <a href="#nutrition" class="nav-link" data-section="nutrition">
+              Nutrition
+            </a>
+          </li>
+  
+          <li>
+            <a href="#fitness" class="nav-link" data-section="fitness">
+              Fitness
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  
+    <main id="main-content">
+  
+      <!-- =======================================================
+           HOME
+           ======================================================= -->
+      <section id="home" class="page-section active-section" aria-labelledby="home-title">
+        <div class="home-container">
+  
+          <header class="section-header home-header">
+            <h1 id="home-title">SLEEP WELL FIT</h1>
+  
+            <p class="home-tagline">
+              Sleep better. Eat better. Move better.
+            </p>
+  
+            <div class="wellness-message">
+              <div class="wellness-icons" aria-hidden="true">
+                <span>☾</span>
+                <span>🥣</span>
+                <span>🏋</span>
+              </div>
+  
+              <p>
+                Your journey to a healthier, happier you.
+              </p>
+            </div>
+          </header>
+  
+          <div class="home-cards">
+  
+            <!-- Sleep card -->
+            <article class="home-card">
+              <div class="home-card-icon" aria-hidden="true">
+                ☾
+              </div>
+  
+              <h2>Sleep</h2>
+  
+              <p>
+                Track your sleep and improve your rest.
+              </p>
+  
+              <button type="button" class="card-button" data-section="sleep">
+                GO TO SLEEP
+              </button>
+            </article>
+  
+            <!-- Nutrition card -->
+            <article class="home-card">
+              <div class="home-card-icon" aria-hidden="true">
+                🥣
+              </div>
+  
+              <h2>Nutrition</h2>
+  
+              <p>
+                Discover healthy recipes and meal ideas.
+              </p>
+  
+              <button type="button" class="card-button" data-section="nutrition">
+                GO TO NUTRITION
+              </button>
+            </article>
+  
+            <!-- Fitness card -->
+            <article class="home-card">
+              <div class="home-card-icon" aria-hidden="true">
+                🏋
+              </div>
+  
+              <h2>Fitness</h2>
+  
+              <p>
+                Find exercises and build your best routine.
+              </p>
+  
+              <button type="button" class="card-button" data-section="fitness">
+                GO TO FITNESS
+              </button>
+            </article>
+  
+          </div>
+  
+          <div class="home-cta">
+            <button type="button" class="primary-button" data-section="sleep">
+              START YOUR WELLNESS JOURNEY
+            </button>
+          </div>
+  
+        </div>
+      </section>
+  
+  
+      <!-- =======================================================
+           SLEEP
+           ======================================================= -->
+      <section id="sleep" class="page-section" aria-labelledby="sleep-title" hidden>
+        <div class="page-container">
+  
+          <header class="section-header">
+            <div class="section-heading-icon" aria-hidden="true">
+              ☾
+            </div>
+  
+            <div>
+              <h1 id="sleep-title">SLEEP</h1>
+  
+              <p>
+                Track your sleep and see your progress.
+              </p>
+            </div>
+          </header>
+  
+  
+          <!-- Sleep calculator -->
+          <section class="sleep-calculator" aria-labelledby="sleep-calculator-title">
+            <h2 id="sleep-calculator-title">
+              Sleep Tracker
+            </h2>
+  
+            <form id="sleep-form">
+  
+              <div class="form-group">
+                <label for="bedtime">
+                  What time did you go to bed?
+                </label>
+  
+                <input type="time" id="bedtime" name="bedtime" required aria-required="true" />
+              </div>
+  
+              <div class="form-group">
+                <label for="wake-time">
+                  What time did you wake up?
+                </label>
+  
+                <input type="time" id="wake-time" name="wakeTime" required aria-required="true" />
+              </div>
+  
+              <button type="submit" class="primary-button" id="calculate-sleep">
+                CALCULATE HOURS
+              </button>
+            </form>
+  
+  
+            <!-- Calculated sleep result -->
+            <div id="sleep-result" class="sleep-result" aria-live="polite" aria-atomic="true">
+              <div class="result-icon" aria-hidden="true">
+                ☾
+              </div>
+  
+              <p class="result-label">
+                You slept
+              </p>
+  
+              <p id="sleep-hours" class="result-value">
+                -- hours
+              </p>
+            </div>
+  
+  
+            <button type="button" id="save-sleep" class="secondary-button" disabled>
+              ♧ SAVE SLEEP
+            </button>
+          </section>
+  
+  
+          <!-- Sleep history -->
+          <section class="sleep-history" aria-labelledby="sleep-history-title">
+            <header class="history-header">
+              <div class="section-heading-icon" aria-hidden="true">
+                ☷
+              </div>
+  
+              <div>
+                <h2 id="sleep-history-title">
+                  YOUR SLEEP HISTORY
+                </h2>
+  
+                <p>
+                  Your saved sleep data will appear here.
+                </p>
+              </div>
+            </header>
+  
+  
+            <!-- JavaScript will populate this list -->
+            <div id="sleep-history-list" class="history-list" aria-live="polite">
+              <div class="empty-state">
+                <div class="empty-state-icon" aria-hidden="true">
+                  ☾
+                </div>
+  
+                <p>
+                  No sleep records yet.
+                </p>
+              </div>
+            </div>
+  
+  
+            <button type="button" id="clear-history" class="danger-button">
+              CLEAR ALL HISTORY
+            </button>
+          </section>
+  
+        </div>
+      </section>
+  
+  
+      <!-- =======================================================
+           NUTRITION
+           ======================================================= -->
+      <section id="nutrition" class="page-section" aria-labelledby="nutrition-title" hidden>
+        <div class="page-container">
+  
+          <header class="section-header">
+            <div class="section-heading-icon" aria-hidden="true">
+              🥣
+            </div>
+  
+            <div>
+              <h1 id="nutrition-title">NUTRITION</h1>
+  
+              <p>
+                Find healthy recipes and meal ideas.
+              </p>
+            </div>
+          </header>
+  
+  
+          <!-- Recipe search -->
+          <section class="recipe-search" aria-labelledby="recipe-search-title">
+            <h2 id="recipe-search-title" class="visually-hidden">
+              Search recipes
+            </h2>
+  
+            <form id="recipe-search-form">
+              <div class="search-group">
+  
+                <label for="recipe-search" class="visually-hidden">
+                  Search for a recipe
+                </label>
+  
+                <input type="search" id="recipe-search" name="recipe"
+                  placeholder="Search for a recipe (e.g. chicken, pasta, salad...)" autocomplete="off" />
+  
+                <button type="submit" class="primary-button">
+                  SEARCH
+                </button>
+  
+              </div>
+            </form>
+          </section>
+  
+  
+          <!-- Search results -->
+          <section class="recipe-results" aria-labelledby="recipe-results-title">
+            <header class="content-header">
+              <h2 id="recipe-results-title">
+                RECIPES
+              </h2>
+            </header>
+  
+            <!-- JavaScript inserts recipe cards here -->
+            <div id="recipe-list" class="recipe-grid" aria-live="polite"></div>
+          </section>
+  
+  
+          <!-- Favorite recipes -->
+          <section class="favorite-recipes" aria-labelledby="favorite-recipes-title">
+            <header class="content-header">
+              <div class="content-heading">
+                <span aria-hidden="true">♡</span>
+  
+                <h2 id="favorite-recipes-title">
+                  SAVED RECIPES
+                </h2>
+              </div>
+  
+              <p>
+                Your favorite recipes will appear here.
+              </p>
+            </header>
+  
+            <!-- JavaScript inserts favorite cards here -->
+            <div id="favorite-list" class="recipe-grid" aria-live="polite"></div>
+          </section>
+  
+        </div>
+      </section>
+  
+  
+      <!-- =======================================================
+           FITNESS
+           ======================================================= -->
+      <section id="fitness" class="page-section" aria-labelledby="fitness-title" hidden>
+        <div class="page-container">
+  
+          <header class="section-header">
+            <div class="section-heading-icon" aria-hidden="true">
+              🏋
+            </div>
+  
+            <div>
+              <h1 id="fitness-title">FITNESS</h1>
+  
+              <p>
+                Find exercises for every muscle group.
+              </p>
+            </div>
+          </header>
+  
+  
+          <!-- Exercise filters -->
+          <section class="exercise-filters" aria-labelledby="exercise-filter-title">
+            <h2 id="exercise-filter-title">
+              CHOOSE A BODY PART
+            </h2>
+  
+            <div class="filter-buttons" role="group" aria-label="Filter exercises by body part">
+              <button type="button" class="filter-button active" data-muscle="chest" aria-pressed="true">
+                Chest
+              </button>
+  
+              <button type="button" class="filter-button" data-muscle="back" aria-pressed="false">
+                Back
+              </button>
+  
+              <button type="button" class="filter-button" data-muscle="legs" aria-pressed="false">
+                Legs
+              </button>
+  
+              <button type="button" class="filter-button" data-muscle="arms" aria-pressed="false">
+                Arms
+              </button>
+  
+              <button type="button" class="filter-button" data-muscle="shoulders" aria-pressed="false">
+                Shoulders
+              </button>
+  
+              <button type="button" class="filter-button" data-muscle="abs" aria-pressed="false">
+                Abs
+              </button>
+            </div>
+          </section>
+  
+  
+          <!-- Exercise results -->
+          <section class="exercise-results" aria-labelledby="exercise-results-title">
+            <header class="content-header">
+              <h2 id="exercise-results-title">
+                EXERCISES
+              </h2>
+            </header>
+  
+            <!-- JavaScript inserts exercise cards here -->
+            <div id="exercise-list" class="exercise-list" aria-live="polite"></div>
+          </section>
+  
+        </div>
+      </section>
+  
+    </main>
+  
+  
+    <!-- =========================================================
+         RECIPE MODAL
+         ========================================================= -->
+    <dialog id="recipe-modal" class="modal" aria-labelledby="recipe-modal-title">
+      <div class="modal-content">
+  
+        <header class="modal-header">
+          <h2 id="recipe-modal-title">
+            Recipe Details
+          </h2>
+  
+          <button type="button" class="modal-close" id="recipe-modal-close" aria-label="Close recipe details">
+            ×
+          </button>
+        </header>
+  
+        <div id="recipe-modal-body">
+          <!-- JavaScript inserts recipe details here -->
+        </div>
+  
+      </div>
+    </dialog>
+  
+  
+    <!-- =========================================================
+         EXERCISE MODAL
+         ========================================================= -->
+    <dialog id="exercise-modal" class="modal" aria-labelledby="exercise-modal-title">
+      <div class="modal-content">
+  
+        <header class="modal-header">
+          <h2 id="exercise-modal-title">
+            Exercise Details
+          </h2>
+  
+          <button type="button" class="modal-close" id="exercise-modal-close" aria-label="Close exercise details">
+            ×
+          </button>
+        </header>
+  
+        <div id="exercise-modal-body">
+          <!-- JavaScript inserts exercise details here -->
+        </div>
+  
+      </div>
+    </dialog>
+  
+  
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+    <footer class="site-footer">
+      <p>
+        Sleep Well Fit © 2026 | Be Well. Live Well.
+      </p>
+  
+      <div class="social-links" aria-label="Social media links">
+        <a href="#" aria-label="Instagram">
+          Instagram
+        </a>
+  
+        <a href="#" aria-label="Facebook">
+          Facebook
+        </a>
+  
+        <a href="#" aria-label="Twitter">
+          Twitter
+        </a>
+      </div>
+    </footer>
+  
+  
+    <!-- =========================================================
+         JAVASCRIPT MODULE
+         ========================================================= -->
+    <script type="module" src="src/js/app.js"></script>
   </body>
-</html>
+  
+  </html>
