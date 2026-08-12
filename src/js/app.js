@@ -1,15 +1,4 @@
-/* =========================================================
-   SLEEP WELL FIT
-   Main Application Module
-   ---------------------------------------------------------
-   Responsibilities:
-   - Handle SPA navigation
-   - Show / hide application sections
-   - Update active navigation links
-   - Handle Home CTA and navigation buttons
-   - Initialize Sleep, Nutrition and Fitness modules
-   - Keep URL hash synchronized with the current section
-   ========================================================= */
+
 
 import { initSleep } from "./sleep.js";
 import { initNutrition } from "./nutrition.js";
@@ -309,6 +298,9 @@ async function initApp() {
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", initApp);
+
+//Get the current year and the Last modified
+document.querySelector('#currentyear').textContent = new Date().getFullYear();
 
 /* =========================================================
    MODULE EXPORTS

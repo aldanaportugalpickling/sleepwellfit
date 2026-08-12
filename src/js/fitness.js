@@ -30,9 +30,6 @@ const MUSCLE_FILTERS = {
   abs: ["abs", "abdominals", "abdominal", "rectus abdominis", "obliques"],
 };
 
-/* =========================================================
-   DOM ELEMENTS
-   ========================================================= */
 
 const exerciseList = document.querySelector("#exercise-list");
 
@@ -46,18 +43,13 @@ const exerciseModalClose = document.querySelector("#exercise-modal-close");
 
 const filterButtons = document.querySelectorAll(".filter-button");
 
-/* =========================================================
-   APPLICATION STATE
-   ========================================================= */
+//Aplication state.
 
 let allExercises = [];
 
 let currentFilter = "chest";
 
-/* =========================================================
-   SECURITY / HTML HELPERS
-   ========================================================= */
-
+//Security.
 /**
  * Escapes text before inserting it into HTML.
  *
@@ -104,9 +96,7 @@ function truncateText(description, maxLength = 150) {
   return `${text.slice(0, maxLength).trim()}...`;
 }
 
-/* =========================================================
-   API
-   ========================================================= */
+//API
 
 /**
  * Retrieves exercises from the wger API.
@@ -131,9 +121,7 @@ async function fetchExercises() {
   }
 }
 
-/* =========================================================
-   EXERCISE DATA HELPERS
-   ========================================================= */
+//Exercise data helpers.
 
 /**
  * Gets muscle names from a wger exercise.
@@ -244,9 +232,8 @@ function getMuscleLabel(exercise) {
   return getCategoryName(exercise);
 }
 
-/* =========================================================
-   FILTERING
-   ========================================================= */
+
+//Filtering
 
 /**
  * Determines whether an exercise belongs to
@@ -316,9 +303,7 @@ function updateFilterButtons(activeFilter) {
   });
 }
 
-/* =========================================================
-   EXERCISE CARDS
-   ========================================================= */
+//exercise cards
 
 /**
  * Creates an exercise card.
@@ -331,7 +316,7 @@ function createExerciseCard(exercise) {
 
   card.className = "exercise-card";
 
-  const name = exercise.name || "Unnamed exercise";
+ 
 
   const description = exercise.description || "";
 

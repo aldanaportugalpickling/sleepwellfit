@@ -274,9 +274,8 @@ function createHistoryItem(record) {
   return item;
 }
 
-/**
- * Renders all saved sleep records.
- */
+// Renders all saved sleep records.
+ 
 function renderSleepHistory() {
   const history = getSleepHistory();
 
