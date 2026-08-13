@@ -22,6 +22,7 @@
     }
   ],
 
+
   "homeCards": [
     {
       "title": "Sleep",
@@ -79,21 +80,81 @@
     }
   ],
 
-  "socialLinks": [
+
+
+   "socialLinks": [
     {
       "label": "Instagram",
-      "href": "#",
+      "href": "https://www.instagram.com/",
       "ariaLabel": "Instagram"
     },
     {
       "label": "Facebook",
-      "href": "#",
+      "href": "https://www.facebook.com/",
       "ariaLabel": "Facebook"
     },
     {
-      "label": "Twitter",
-      "href": "#",
-      "ariaLabel": "Twitter"
+      "label": "WhatsApp",
+      "href": "https://www.whatsapp.com/",
+      "ariaLabel": "WhatsApp"
     }
-  ]
+  ],
+
+  "content": {
+    "home": {
+      "title": "SLEEP WELL FIT",
+      "tagline": "Sleep better. Eat better. Move better.",
+      "message": "Your journey to a healthier, happier you.",
+      "cta": "START YOUR WELLNESS JOURNEY",
+      "ctaSection": "sleep"
+    },
+
+    "sleep": {
+      "title": "SLEEP",
+      "description": "Track your sleep and see your progress.",
+      "calculatorTitle": "Sleep Tracker",
+      "bedtimeLabel": "What time did you go to bed?",
+      "wakeTimeLabel": "What time did you wake up?",
+      "calculateButton": "CALCULATE HOURS",
+      "resultLabel": "You slept",
+      "saveButton": "SAVE SLEEP",
+      "historyTitle": "YOUR SLEEP HISTORY",
+      "historyDescription": "Your saved sleep data will appear here.",
+      "emptyHistory": "No sleep records yet.",
+      "clearButton": "CLEAR ALL HISTORY"
+    },
+
+    "nutrition": {
+      "title": "NUTRITION",
+      "description": "Find healthy recipes and meal ideas.",
+      "searchLabel": "Search for a recipe",
+      "searchPlaceholder": "Search for a recipe (e.g. chicken, pasta, salad...)",
+      "searchButton": "SEARCH",
+      "resultsTitle": "RECIPES",
+      "favoritesTitle": "SAVED RECIPES",
+      "favoritesDescription": "Your favorite recipes will appear here."
+    },
+
+    "fitness": {
+      "title": "FITNESS",
+      "description": "Find exercises for every muscle group.",
+      "filterTitle": "CHOOSE A BODY PART",
+      "filterAriaLabel": "Filter exercises by body part",
+      "resultsTitle": "EXERCISES"
+    },
+
+    "modals": {
+      "recipeTitle": "Recipe Details",
+      "exerciseTitle": "Exercise Details",
+      "closeRecipe": "Close recipe details",
+      "closeExercise": "Close exercise details"
+    }
+  }
 }
+
+
+
+
+
+
+  
