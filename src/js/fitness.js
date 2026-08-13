@@ -327,6 +327,17 @@ function updateFilterButtons(activeFilter) {
  * @returns {HTMLElement} Exercise card.
  */
 function createExerciseCard(exercise) {
+
+
+  //ADDEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+const image = getExerciseImage(exercise);
+
+// Do not display exercises without an image
+if (!image) {
+  return null;
+}
+//HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
   const card = document.createElement("article");
 
   card.className = "exercise-card";
@@ -341,7 +352,8 @@ function createExerciseCard(exercise) {
 
   const category = getCategoryName(exercise);
 
-  const image = getExerciseImage(exercise);
+  //HERE DELETE THE PLACEHOLDER 
+  //const image = getExerciseImage(exercise);
 
   const imageHTML = image
     ? `
@@ -467,8 +479,17 @@ function renderExercises(exercises) {
   const fragment = document.createDocumentFragment();
 
   exercises.forEach((exercise) => {
-    fragment.appendChild(createExerciseCard(exercise));
-  });
+
+    //HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    const card = createExerciseCard(exercise);
+
+  if (card) {
+    fragment.appendChild(card);
+  }
+});
+  //HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    //fragment.appendChild(createExerciseCard(exercise));
+  //});
 
   exerciseList.appendChild(fragment);
 }
