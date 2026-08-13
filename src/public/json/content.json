@@ -1,0 +1,99 @@
+{
+  "navigation": [
+    {
+      "label": "Home",
+      "href": "#home",
+      "section": "home"
+    },
+    {
+      "label": "Sleep",
+      "href": "#sleep",
+      "section": "sleep"
+    },
+    {
+      "label": "Nutrition",
+      "href": "#nutrition",
+      "section": "nutrition"
+    },
+    {
+      "label": "Fitness",
+      "href": "#fitness",
+      "section": "fitness"
+    }
+  ],
+
+  "homeCards": [
+    {
+      "title": "Sleep",
+      "description": "Track your sleep and improve your rest.",
+      "buttonText": "GO TO SLEEP",
+      "section": "sleep",
+      "icon": "src/public/sleep.svg"
+    },
+    {
+      "title": "Nutrition",
+      "description": "Discover healthy recipes and meal ideas.",
+      "buttonText": "GO TO NUTRITION",
+      "section": "nutrition",
+      "icon": "src/public/nutrition.svg"
+    },
+    {
+      "title": "Fitness",
+      "description": "Find exercises and build your best routine.",
+      "buttonText": "GO TO FITNESS",
+      "section": "fitness",
+      "icon": "src/public/fitness.svg"
+    }
+  ],
+
+  "fitnessFilters": [
+    {
+      "label": "Chest",
+      "muscle": "chest",
+      "active": true
+    },
+    {
+      "label": "Back",
+      "muscle": "back",
+      "active": false
+    },
+    {
+      "label": "Legs",
+      "muscle": "legs",
+      "active": false
+    },
+    {
+      "label": "Arms",
+      "muscle": "arms",
+      "active": false
+    },
+    {
+      "label": "Shoulders",
+      "muscle": "shoulders",
+      "active": false
+    },
+    {
+      "label": "Abs",
+      "muscle": "abs",
+      "active": false
+    }
+  ],
+
+  "socialLinks": [
+    {
+      "label": "Instagram",
+      "href": "#",
+      "ariaLabel": "Instagram"
+    },
+    {
+      "label": "Facebook",
+      "href": "#",
+      "ariaLabel": "Facebook"
+    },
+    {
+      "label": "Twitter",
+      "href": "#",
+      "ariaLabel": "Twitter"
+    }
+  ]
+}
