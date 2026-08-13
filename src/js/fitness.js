@@ -41,7 +41,7 @@ const exerciseModalTitle = document.querySelector("#exercise-modal-title");
 
 const exerciseModalClose = document.querySelector("#exercise-modal-close");
 
-const filterButtons = document.querySelectorAll(".filter-button");
+//const filterButtons = document.querySelectorAll(".filter-button");
 
 //Aplication state.
 
@@ -293,7 +293,22 @@ function applyMuscleFilter(muscleGroup) {
  *
  * @param {string} activeFilter - Selected filter.
  */
+//function updateFilterButtons(activeFilter) {
+  //filterButtons.forEach((button) => {
+    //const isActive = button.dataset.muscle === activeFilter;
+
+    //button.classList.toggle("active", isActive);
+
+    //button.setAttribute("aria-pressed", String(isActive));
+  //});
+//}
+
+
+//my code
+
 function updateFilterButtons(activeFilter) {
+  const filterButtons = document.querySelectorAll(".filter-button");
+
   filterButtons.forEach((button) => {
     const isActive = button.dataset.muscle === activeFilter;
 
@@ -316,8 +331,8 @@ function createExerciseCard(exercise) {
 
   card.className = "exercise-card";
 
- 
-
+  const name = exercise.name || "Unnamed Exercise";
+  
   const description = exercise.description || "";
 
   const muscle = getMuscleLabel(exercise);
@@ -616,6 +631,9 @@ async function initFitness() {
   }
 
   showLoading();
+
+
+   const filterButtons = document.querySelectorAll(".filter-button");
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", handleFilterClick);

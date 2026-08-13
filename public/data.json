@@ -1,0 +1,107 @@
+{
+  "home": {
+    "title": "SLEEP WELL FIT",
+    "tagline": "Sleep better. Eat better. Move better.",
+    "wellnessMessage": "Your journey to a healthier, happier you.",
+    "wellnessIcons": [
+      {
+        "name": "Sleep",
+        "image": "/sleep.svg"
+      },
+      {
+        "name": "Nutrition",
+        "image": "/nutrition.svg"
+      },
+      {
+        "name": "Fitness",
+        "image": "/fitness.svg"
+      }
+    ],
+    "cards": [
+      {
+        "title": "Sleep",
+        "description": "Track your sleep and improve your rest.",
+        "buttonText": "GO TO SLEEP",
+        "section": "sleep",
+        "icon": "/sleep.svg"
+      },
+      {
+        "title": "Nutrition",
+        "description": "Discover healthy recipes and meal ideas.",
+        "buttonText": "GO TO NUTRITION",
+        "section": "nutrition",
+        "icon": "/nutrition.svg"
+      },
+      {
+        "title": "Fitness",
+        "description": "Find exercises and build your best routine.",
+        "buttonText": "GO TO FITNESS",
+        "section": "fitness",
+        "icon": "/fitness.svg"
+      }
+    ],
+    "cta": {
+      "text": "START YOUR WELLNESS JOURNEY",
+      "section": "sleep"
+    }
+  },
+  "sleep": {
+    "title": "SLEEP",
+    "image": "/sleep.svg",
+    "description": "Track your sleep and see your progress.",
+    "calculatorTitle": "Sleep Tracker",
+    "bedtimeLabel": "What time did you go to bed?",
+    "wakeTimeLabel": "What time did you wake up?",
+    "calculateButton": "CALCULATE HOURS",
+    "resultLabel": "You slept",
+    "saveButton": "SAVE SLEEP",
+    "historyTitle": "YOUR SLEEP HISTORY",
+    "historyDescription": "Your saved sleep data will appear here.",
+    "emptyMessage": "No sleep records yet.",
+    "clearHistoryButton": "CLEAR ALL HISTORY"
+  },
+  "nutrition": {
+    "title": "NUTRITION",
+    "image": "/nutrition.svg",
+    "description": "Find healthy recipes and meal ideas.",
+    "searchPlaceholder": "Search for a recipe (e.g. chicken, pasta, salad...)",
+    "searchButton": "SEARCH",
+    "recipesTitle": "RECIPES",
+    "savedRecipesTitle": "SAVED RECIPES",
+    "savedRecipesDescription": "Your favorite recipes will appear here."
+  },
+  "fitness": {
+    "title": "FITNESS",
+    "image": "/fitness.svg",
+    "description": "Find exercises for every muscle group.",
+    "filterTitle": "CHOOSE A BODY PART",
+    "filterLabel": "Filter exercises by body part",
+    "exerciseTitle": "EXERCISES",
+    "muscles": [
+      {
+        "name": "Chest",
+        "value": "chest"
+      },
+      {
+        "name": "Back",
+        "value": "back"
+      },
+      {
+        "name": "Legs",
+        "value": "legs"
+      },
+      {
+        "name": "Arms",
+        "value": "arms"
+      },
+      {
+        "name": "Shoulders",
+        "value": "shoulders"
+      },
+      {
+        "name": "Abs",
+        "value": "abs"
+      }
+    ]
+  }
+}

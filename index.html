@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/src/public/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <title>SleepWellfit - WDD330 Aldana Andrea Portugal Pickling</title>
@@ -73,439 +73,291 @@
   
     <main id="main-content">
   
-      <!--HOME-->
+      <!-- HOME -->
       <section id="home" class="page-section active-section" aria-labelledby="home-title">
         <div class="home-container">
-  
-          <header class="section-header home-header">
-            <h1 id="home-title">SLEEP WELL FIT</h1>
-  
-            <p class="home-tagline">
-              Sleep better. Eat better. Move better.
-            </p>
-  
-            <div class="wellness-message">
-              <div class="wellness-icons" aria-hidden="true">
-                <span>
-                  <img src="src/public/sleep.svg" alt="">
-                </span>
-
-
-                <span>
-                  <img src="src/public/nutrition.svg" alt="">
-                </span>
-
-                <span>
-
-                  <img src="src/public/fitness.svg" alt="">
-                </span>
-              </div>
-  
-              <p>
-                Your journey to a healthier, happier you.
-              </p>
-            </div>
+      
+          <header class="section-header home-header" id="home-header">
+            <!-- JavaScript loads home content from data.json -->
           </header>
-  
-          <div class="home-cards">
-  
-            <!-- Sleep card -->
-            <article class="home-card">
-              <div class="home-card-icon" aria-hidden="true">
-                <img src="/src/public/sleep.svg" alt="">
-              </div>
-  
-              <h2>Sleep</h2>
-  
-              <p>
-                Track your sleep and improve your rest.
-              </p>
-  
-              <button type="button" class="card-button" data-section="sleep">
-                GO TO SLEEP
-              </button>
-            </article>
-  
-            <!-- Nutrition card -->
-            <article class="home-card">
-              <div class="home-card-icon" aria-hidden="true">
-                <img src="src/public/nutrition.svg" alt="">
-              </div>
-  
-              <h2>Nutrition</h2>
-  
-              <p>
-                Discover healthy recipes and meal ideas.
-              </p>
-  
-              <button type="button" class="card-button" data-section="nutrition">
-                GO TO NUTRITION
-              </button>
-            </article>
-  
-            <!-- Fitness card -->
-            <article class="home-card">
-              <div class="home-card-icon" aria-hidden="true">
-                 <img src="/src/public/fitness.svg" alt="">
-              </div>
-  
-              <h2>Fitness</h2>
-  
-              <p>
-                Find exercises and build your best routine.
-              </p>
-  
-              <button type="button" class="card-button" data-section="fitness">
-                GO TO FITNESS
-              </button>
-            </article>
-  
+      
+          <div class="home-cards" id="home-cards">
+            <!-- JavaScript loads home cards from data.json -->
           </div>
-  
-          <div class="home-cta">
-            <button type="button" class="primary-button" data-section="sleep">
-              START YOUR WELLNESS JOURNEY
-            </button>
+      
+          <div class="home-cta" id="home-cta">
+            <!-- JavaScript loads CTA from data.json -->
           </div>
-  
+      
         </div>
       </section>
-  
-  
-      <!--SLEEP-->
+      
+      
+      <!-- SLEEP -->
       <section id="sleep" class="page-section" aria-labelledby="sleep-title" hidden>
         <div class="page-container">
-  
-          <header class="section-header">
-            <div class="section-heading-icon" aria-hidden="true">
-              <img src="/src/public/sleep.svg" alt="">
-            </div>
-  
-            <div>
-              <h1 id="sleep-title">SLEEP</h1>
-  
-              <p>
-                Track your sleep and see your progress.
-              </p>
-            </div>
+      
+          <header class="section-header" id="sleep-header">
+            <!-- JavaScript loads sleep header from data.json -->
           </header>
-  
-  
-          <!-- Sleep calculator -->
+      
           <section class="sleep-calculator" aria-labelledby="sleep-calculator-title">
-            <h2 id="sleep-calculator-title">
-              Sleep Tracker
-            </h2>
-  
+      
+            <h2 id="sleep-calculator-title"></h2>
+      
             <form id="sleep-form">
-  
+      
               <div class="form-group">
-                <label for="bedtime">
-                  What time did you go to bed?
-                </label>
-  
+                <label for="bedtime" id="bedtime-label"></label>
+      
                 <input type="time" id="bedtime" name="bedtime" required aria-required="true" />
               </div>
-  
+      
               <div class="form-group">
-                <label for="wake-time">
-                  What time did you wake up?
-                </label>
-  
+                <label for="wake-time" id="wake-time-label"></label>
+      
                 <input type="time" id="wake-time" name="wakeTime" required aria-required="true" />
               </div>
-  
-              <button type="submit" class="primary-button" id="calculate-sleep">
-                CALCULATE HOURS
-              </button>
+      
+              <button type="submit" class="primary-button" id="calculate-sleep"></button>
+      
             </form>
-  
-  
-            <!-- Calculated sleep result -->
+      
             <div id="sleep-result" class="sleep-result" aria-live="polite" aria-atomic="true">
               <div class="result-icon" aria-hidden="true">
                 ☾
               </div>
-  
-              <p class="result-label">
-                You slept
-              </p>
-  
+      
+              <p class="result-label" id="sleep-result-label"></p>
+      
               <p id="sleep-hours" class="result-value">
                 -- hours
               </p>
             </div>
-  
-  
-            <button type="button" id="save-sleep" class="secondary-button" disabled>
-              SAVE SLEEP
-            </button>
+      
+            <button type="button" id="save-sleep" class="secondary-button" disabled></button>
+      
           </section>
-  
-  
-          <!-- Sleep history -->
+      
+      
           <section class="sleep-history" aria-labelledby="sleep-history-title">
+      
             <header class="history-header">
+      
               <div class="section-heading-icon" aria-hidden="true">
                 ☷
               </div>
-  
+      
               <div>
-                <h2 id="sleep-history-title">
-                  YOUR SLEEP HISTORY
-                </h2>
-  
-                <p>
-                  Your saved sleep data will appear here.
-                </p>
+                <h2 id="sleep-history-title"></h2>
+      
+                <p id="sleep-history-description"></p>
               </div>
+      
             </header>
-  
-  
-            <!-- JavaScript will populate this list -->
+      
             <div id="sleep-history-list" class="history-list" aria-live="polite">
               <div class="empty-state">
+      
                 <div class="empty-state-icon" aria-hidden="true">
                   ☾
                 </div>
-  
-                <p>
-                  No sleep records yet.
-                </p>
+      
+                <p id="sleep-empty-message"></p>
+      
               </div>
             </div>
-  
-  
-            <button type="button" id="clear-history" class="danger-button">
-              CLEAR ALL HISTORY
-            </button>
+      
+            <button type="button" id="clear-history" class="danger-button"></button>
+      
           </section>
-  
+      
         </div>
       </section>
-  
-  
-      <!--NUTRITION-->
+      
+      
+      <!-- NUTRITION -->
       <section id="nutrition" class="page-section" aria-labelledby="nutrition-title" hidden>
         <div class="page-container">
-  
-          <header class="section-header">
-            <div class="section-heading-icon" aria-hidden="true">
-              <img src="/src/public/nutrition.svg" alt="">
-            </div>
-  
-            <div>
-              <h1 id="nutrition-title">NUTRITION</h1>
-  
-              <p>
-                Find healthy recipes and meal ideas.
-              </p>
-            </div>
+      
+          <header class="section-header" id="nutrition-header">
+            <!-- JavaScript loads nutrition header from data.json -->
           </header>
-  
-  
-          <!-- Recipe search -->
+      
           <section class="recipe-search" aria-labelledby="recipe-search-title">
+      
             <h2 id="recipe-search-title" class="visually-hidden">
               Search recipes
             </h2>
-  
+      
             <form id="recipe-search-form">
+      
               <div class="search-group">
-  
+      
                 <label for="recipe-search" class="visually-hidden">
                   Search for a recipe
                 </label>
-  
-                <input type="search" id="recipe-search" name="recipe"
-                  placeholder="Search for a recipe (e.g. chicken, pasta, salad...)" autocomplete="off" />
-  
-                <button type="submit" class="primary-button">
-                  SEARCH
-                </button>
-  
+      
+                <input type="search" id="recipe-search" name="recipe" autocomplete="off" />
+      
+                <button type="submit" class="primary-button" id="recipe-search-button"></button>
+      
               </div>
+      
             </form>
+      
           </section>
-  
-  
-          <!-- Search results -->
+      
+      
           <section class="recipe-results" aria-labelledby="recipe-results-title">
+      
             <header class="content-header">
-              <h2 id="recipe-results-title">
-                RECIPES
-              </h2>
+              <h2 id="recipe-results-title"></h2>
             </header>
-  
-            <!-- JavaScript inserts recipe cards here -->
+      
             <div id="recipe-list" class="recipe-grid" aria-live="polite"></div>
+      
           </section>
-  
-  
-          <!-- Favorite recipes -->
+      
+      
           <section class="favorite-recipes" aria-labelledby="favorite-recipes-title">
+      
             <header class="content-header">
+      
               <div class="content-heading">
-                <span aria-hidden="true">♡</span>
-  
-                <h2 id="favorite-recipes-title">
-                  SAVED RECIPES
-                </h2>
+      
+                <!--<span aria-hidden="true">♡</span>-->
+      
+                <h2 id="favorite-recipes-title"></h2>
+      
               </div>
-  
-              <p>
-                Your favorite recipes will appear here.
-              </p>
+      
+              <p id="favorite-recipes-description"></p>
+      
             </header>
-  
-            <!-- JavaScript inserts favorite cards here -->
+      
             <div id="favorite-list" class="recipe-grid" aria-live="polite"></div>
+      
           </section>
-  
+      
         </div>
       </section>
-  
-  
-      <!--FITNESS-->
+      
+      
+      <!-- FITNESS -->
       <section id="fitness" class="page-section" aria-labelledby="fitness-title" hidden>
         <div class="page-container">
-  
-          <header class="section-header">
-            <div class="section-heading-icon" aria-hidden="true">
-              <img src="/src/public/fitness.svg" alt="">
-            </div>
-  
-            <div>
-              <h1 id="fitness-title">FITNESS</h1>
-  
-              <p>
-                Find exercises for every muscle group.
-              </p>
-            </div>
+      
+          <header class="section-header" id="fitness-header">
+            <!-- JavaScript loads fitness header from data.json -->
           </header>
-  
-  
-          <!-- Exercise filters -->
+      
+      
           <section class="exercise-filters" aria-labelledby="exercise-filter-title">
-            <h2 id="exercise-filter-title">
-              CHOOSE A BODY PART
-            </h2>
-  
-            <div class="filter-buttons" role="group" aria-label="Filter exercises by body part">
-              <button type="button" class="filter-button active" data-muscle="chest" aria-pressed="true">
-                Chest
-              </button>
-  
-              <button type="button" class="filter-button" data-muscle="back" aria-pressed="false">
-                Back
-              </button>
-  
-              <button type="button" class="filter-button" data-muscle="legs" aria-pressed="false">
-                Legs
-              </button>
-  
-              <button type="button" class="filter-button" data-muscle="arms" aria-pressed="false">
-                Arms
-              </button>
-  
-              <button type="button" class="filter-button" data-muscle="shoulders" aria-pressed="false">
-                Shoulders
-              </button>
-  
-              <button type="button" class="filter-button" data-muscle="abs" aria-pressed="false">
-                Abs
-              </button>
+      
+            <h2 id="exercise-filter-title"></h2>
+      
+            <div class="filter-buttons" role="group" aria-label="Filter exercises by body part" id="fitness-filter-buttons">
+              <!-- JavaScript loads filter buttons from data.json -->
             </div>
+      
           </section>
-  
-  
-          <!-- Exercise results -->
+      
+      
           <section class="exercise-results" aria-labelledby="exercise-results-title">
+      
             <header class="content-header">
-              <h2 id="exercise-results-title">
-                EXERCISES
-              </h2>
+              <h2 id="exercise-results-title"></h2>
             </header>
-  
-            <!-- JavaScript inserts exercise cards here -->
+      
             <div id="exercise-list" class="exercise-list" aria-live="polite"></div>
+      
           </section>
-  
+      
         </div>
       </section>
-  
-    </main>
-  
-  
-    <!-- =========================================================
-         RECIPE MODAL
-         ========================================================= -->
-    <dialog id="recipe-modal" class="modal" aria-labelledby="recipe-modal-title">
-      <div class="modal-content">
-  
-        <header class="modal-header">
-          <h2 id="recipe-modal-title">
-            Recipe Details
-          </h2>
-  
-          <button type="button" class="modal-close" id="recipe-modal-close" aria-label="Close recipe details">
-            ×
-          </button>
-        </header>
-  
-        <div id="recipe-modal-body">
-          <!-- JavaScript inserts recipe details here -->
+      
+      </main>
+      
+      
+      <!-- RECIPE MODAL -->
+      <dialog id="recipe-modal" class="modal" aria-labelledby="recipe-modal-title">
+      
+        <div class="modal-content">
+      
+          <header class="modal-header">
+      
+            <h2 id="recipe-modal-title">
+              Recipe Details
+            </h2>
+      
+            <button type="button" class="modal-close" id="recipe-modal-close" aria-label="Close recipe details">
+              ×
+            </button>
+      
+          </header>
+      
+          <div id="recipe-modal-body">
+            <!-- JavaScript inserts recipe details here -->
+          </div>
+      
         </div>
-  
-      </div>
-    </dialog>
-  
-  
-    <!--EXERCISE MODAL -->
-    <dialog id="exercise-modal" class="modal" aria-labelledby="exercise-modal-title">
-      <div class="modal-content">
-  
-        <header class="modal-header">
-          <h2 id="exercise-modal-title">
-            Exercise Details
-          </h2>
-  
-          <button type="button" class="modal-close" id="exercise-modal-close" aria-label="Close exercise details">
-            ×
-          </button>
-        </header>
-  
-        <div id="exercise-modal-body">
-          <!-- JavaScript inserts exercise details here -->
+      
+      </dialog>
+      
+      
+      <!-- EXERCISE MODAL -->
+      <dialog id="exercise-modal" class="modal" aria-labelledby="exercise-modal-title">
+      
+        <div class="modal-content">
+      
+          <header class="modal-header">
+      
+            <h2 id="exercise-modal-title">
+              Exercise Details
+            </h2>
+      
+            <button type="button" class="modal-close" id="exercise-modal-close" aria-label="Close exercise details">
+              ×
+            </button>
+      
+          </header>
+      
+          <div id="exercise-modal-body">
+            <!-- JavaScript inserts exercise details here -->
+          </div>
+      
         </div>
-  
-      </div>
-    </dialog>
-  
-  
-
-    <footer class="site-footer">
-      <p>
-        &copy; <span id="currentyear"></span> Sleep Well Fit | Aldana Andrea Portugal Pickling.
-      </p>
-  
-      <div class="social-links" aria-label="Social media links">
-        <a href="https://www.instagram.com/"  target="_blank" aria-label="Instagram">
-          Instagram
-        </a>
-  
-        <a href="https://www.facebook.com/"  target="_blank" aria-label="Facebook">
-          Facebook
-        </a>
-  
-        <a href="https://www.whatsapp.com/"  target="_blank" aria-label="Twitter">
-          WhatsApp
-        </a>
-      </div>
-    </footer>
-  
-
-    
-  </body>
-  
-  </html>
+      
+      </dialog>
+      
+      
+      <footer class="site-footer">
+      
+        <p>
+          &copy;
+          <span id="currentyear"></span>
+          Sleep Well Fit | Aldana Andrea Portugal Pickling.
+        </p>
+      
+        <div class="social-links" aria-label="Social media links">
+      
+          <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram">
+            Instagram
+          </a>
+      
+          <a href="https://www.facebook.com/" target="_blank" aria-label="Facebook">
+            Facebook
+          </a>
+      
+          <a href="https://www.whatsapp.com/" target="_blank" aria-label="WhatsApp">
+            WhatsApp
+          </a>
+      
+        </div>
+      
+      </footer>
+      
+      </body>
+      
+      </html>

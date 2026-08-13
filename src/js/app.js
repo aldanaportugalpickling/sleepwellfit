@@ -1,5 +1,3 @@
-
-
 import { initSleep } from "./sleep.js";
 import { initNutrition } from "./nutrition.js";
 import { initFitness } from "./fitness.js";
@@ -11,6 +9,8 @@ import { initFitness } from "./fitness.js";
 const DEFAULT_SECTION = "home";
 
 const VALID_SECTIONS = ["home", "sleep", "nutrition", "fitness"];
+
+const DATA_URL = "/data.json";
 
 /* =========================================================
    DOM ELEMENTS
@@ -24,7 +24,248 @@ const navigationList = document.querySelector("#main-navigation");
 
 const menuToggle = document.querySelector(".menu-toggle");
 
-const sectionButtons = document.querySelectorAll("[data-section]");
+/* =========================================================
+   LOAD LOCAL JSON DATA
+   ========================================================= */
+
+
+async function loadData() {
+  try {
+    const response = await fetch(DATA_URL);
+
+    if (!response.ok) {
+      throw new Error(
+        `Unable to load data.json: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error loading local data.json:", error);
+    throw error;
+  }
+}
+
+/* =========================================================
+   STATIC CONTENT RENDERING
+   ========================================================= */
+
+
+function renderSectionHeader(container, data) {
+  if (!container || !data) {
+    return;
+  }
+
+  const iconMap = {
+    SLEEP: "src/public/sleep.svg",
+    NUTRITION: "src/public/nutrition.svg",
+    FITNESS: "src/public/fitness.svg",
+  };
+
+  const icon = iconMap[data.title] || "";
+
+  container.innerHTML = `
+    <div class="section-heading-icon" aria-hidden="true">
+      <img src="${data.image}" alt="">
+    </div>
+
+    <div>
+      <h1 id="${data.title.toLowerCase()}-title">
+        ${data.title}
+      </h1>
+
+      <p>
+        ${data.description}
+      </p>
+    </div>
+  `;
+}
+
+
+function renderHome(data) {
+  const homeHeader = document.querySelector("#home-header");
+  const homeCards = document.querySelector("#home-cards");
+  const homeCta = document.querySelector("#home-cta");
+
+  if (!homeHeader || !homeCards || !homeCta) {
+    return;
+  }
+
+  homeHeader.innerHTML = `
+    <h1 id="home-title">
+      ${data.title}
+    </h1>
+
+    <p class="home-tagline">
+      ${data.tagline}
+    </p>
+
+    <div class="wellness-message">
+
+      <div class="wellness-icons" aria-hidden="true">
+
+        ${data.wellnessIcons
+          .map(
+            (icon) => `
+              <span>
+                <img src="${icon.image}" alt="">
+              </span>
+            `,
+          )
+          .join("")}
+
+      </div>
+
+      <p>
+        ${data.wellnessMessage}
+      </p>
+
+    </div>
+  `;
+
+  homeCards.innerHTML = data.cards
+    .map(
+      (card) => `
+        <article class="home-card">
+
+          <div class="home-card-icon" aria-hidden="true">
+            <img src="${card.icon}" alt="">
+          </div>
+
+          <h2>
+            ${card.title}
+          </h2>
+
+          <p>
+            ${card.description}
+          </p>
+
+          <button
+            type="button"
+            class="card-button"
+            data-section="${card.section}"
+          >
+            ${card.buttonText}
+          </button>
+
+        </article>
+      `,
+    )
+    .join("");
+
+  homeCta.innerHTML = `
+    <button
+      type="button"
+      class="primary-button"
+      data-section="${data.cta.section}"
+    >
+      ${data.cta.text}
+    </button>
+  `;
+}
+
+
+function renderSleep(data) {
+  renderSectionHeader(document.querySelector("#sleep-header"), data);
+
+  document.querySelector("#sleep-calculator-title").textContent =
+    data.calculatorTitle;
+
+  document.querySelector("#bedtime-label").textContent = data.bedtimeLabel;
+
+  document.querySelector("#wake-time-label").textContent = data.wakeTimeLabel;
+
+  document.querySelector("#calculate-sleep").textContent = data.calculateButton;
+
+  document.querySelector("#sleep-result-label").textContent = data.resultLabel;
+
+  document.querySelector("#save-sleep").textContent = data.saveButton;
+
+  document.querySelector("#sleep-history-title").textContent =
+    data.historyTitle;
+
+  document.querySelector("#sleep-history-description").textContent =
+    data.historyDescription;
+
+  document.querySelector("#sleep-empty-message").textContent =
+    data.emptyMessage;
+
+  document.querySelector("#clear-history").textContent =
+    data.clearHistoryButton;
+}
+
+/**
+ * Renders Nutrition static content using data.json.
+ *
+ * @param {Object} data - Nutrition data.
+ */
+function renderNutrition(data) {
+  renderSectionHeader(document.querySelector("#nutrition-header"), data);
+
+  document.querySelector("#recipe-search").placeholder = data.searchPlaceholder;
+
+  document.querySelector("#recipe-search-button").textContent =
+    data.searchButton;
+
+  document.querySelector("#recipe-results-title").textContent =
+    data.recipesTitle;
+
+  document.querySelector("#favorite-recipes-title").textContent =
+    data.savedRecipesTitle;
+
+  document.querySelector("#favorite-recipes-description").textContent =
+    data.savedRecipesDescription;
+}
+
+/**
+ * Renders Fitness static content using data.json.
+ *
+ * @param {Object} data - Fitness data.
+ */
+function renderFitness(data) {
+  renderSectionHeader(document.querySelector("#fitness-header"), data);
+
+  document.querySelector("#exercise-filter-title").textContent =
+    data.filterTitle;
+
+  document.querySelector("#exercise-results-title").textContent =
+    data.exerciseTitle;
+
+  const filterContainer = document.querySelector("#fitness-filter-buttons");
+
+  if (!filterContainer) {
+    return;
+  }
+
+  filterContainer.innerHTML = data.muscles
+    .map(
+      (muscle, index) => `
+        <button
+          type="button"
+          class="filter-button${index === 0 ? " active" : ""}"
+          data-muscle="${muscle.value}"
+          aria-pressed="${index === 0 ? "true" : "false"}"
+        >
+          ${muscle.name}
+        </button>
+      `,
+    )
+    .join("");
+}
+
+/**
+ * Renders all static content from data.json.
+ *
+ * @param {Object} data - Complete application data.
+ */
+function renderStaticContent(data) {
+  renderHome(data.home);
+  renderSleep(data.sleep);
+  renderNutrition(data.nutrition);
+  renderFitness(data.fitness);
+}
 
 /* =========================================================
    NAVIGATION HELPERS
@@ -161,10 +402,6 @@ function handleSectionClick(event) {
     return;
   }
 
-  /*
-   * Navigation anchors should use the hash normally,
-   * while buttons need explicit SPA navigation.
-   */
   if (target.tagName.toLowerCase() === "a") {
     closeMobileMenu();
     return;
@@ -236,6 +473,13 @@ function handleKeyboard(event) {
    ========================================================= */
 
 function setupNavigation() {
+  /*
+   * The Home buttons are now created dynamically
+   * from data.json, so they must be selected here,
+   * after the JSON has been rendered.
+   */
+  const sectionButtons = document.querySelectorAll("[data-section]");
+
   sectionButtons.forEach((button) => {
     button.addEventListener("click", handleSectionClick);
   });
@@ -260,8 +504,25 @@ function setupNavigation() {
  */
 async function initApp() {
   /*
-   * Set the initial SPA section before loading
-   * the individual components.
+   * First load the local JSON file.
+   */
+  try {
+    const data = await loadData();
+
+    /*
+     * Inject all static content from data.json
+     * into the existing HTML containers.
+     */
+    renderStaticContent(data);
+  } catch (error) {
+    console.error("Application data initialization failed:", error);
+
+    return;
+  }
+
+  /*
+   * Set the initial SPA section after
+   * the static content has been rendered.
    */
   showSection(getSectionFromHash());
 
@@ -269,10 +530,6 @@ async function initApp() {
 
   /*
    * Initialize each independent module.
-   *
-   * They are initialized separately so an error
-   * in one API does not prevent the rest of the
-   * application from starting.
    */
   try {
     initSleep();
@@ -299,11 +556,17 @@ async function initApp() {
 
 document.addEventListener("DOMContentLoaded", initApp);
 
-//Get the current year and the Last modified
-document.querySelector('#currentyear').textContent = new Date().getFullYear();
+document.querySelector("#currentyear").textContent = new Date().getFullYear();
 
 /* =========================================================
    MODULE EXPORTS
    ========================================================= */
 
-export { initApp, showSection, navigateTo, getSectionFromHash };
+export {
+  initApp,
+  showSection,
+  navigateTo,
+  getSectionFromHash,
+  loadData,
+  renderStaticContent,
+};
