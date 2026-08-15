@@ -81,18 +81,18 @@
 
                     <form id="sleep-form">
                         <div class="form-group">
-                            <label for="bedtime" id="bedtime-label"></label>
+                            <label for="bedtime" id="bedtime-label">Bedtime</label>
 
                             <input type="time" id="bedtime" name="bedtime" required >
                         </div>
 
                         <div class="form-group">
-                            <label for="wake-time" id="wake-time-label"></label>
+                            <label for="wake-time" id="wake-time-label">Wake time</label>
 
                             <input type="time" id="wake-time" name="wakeTime" required >
                         </div>
 
-                        <button type="submit" class="primary-button" id="calculate-sleep"></button>
+                        <button type="submit" class="primary-button" id="calculate-sleep" aria-label="Calculate">Calculate</button>
                     </form>
 
                     <div id="sleep-result" class="sleep-result" aria-live="polite" aria-atomic="true">
@@ -103,7 +103,7 @@
                         <p id="sleep-hours" class="result-value">-- hours</p>
                     </div>
 
-                    <button type="button" id="save-sleep" class="secondary-button" disabled></button>
+                    <button type="button" id="save-sleep" class="secondary-button" disabled aria-label="Save sleep record">Save</button>
                 </section>
 
                 <section class="sleep-history" aria-labelledby="sleep-history-title">
@@ -125,7 +125,7 @@
                         </div>
                     </div>
 
-                    <button type="button" id="clear-history" class="danger-button"></button>
+                    <button type="button" id="clear-history" class="danger-button" aria-label="Clear sleep history">Clear history</button>
                 </section>
             </div>
         </section>
