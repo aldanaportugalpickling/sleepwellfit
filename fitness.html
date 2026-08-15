@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <link rel="icon" type="image/svg+xml" href="/src/public/favicon.svg" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Fitness | SleepWellfit</title>
+
+    <meta name="description" content="Find exercises and workouts with Sleep Well Fit." />
+
+    <meta name="author" content="Aldana Andrea Portugal Pickling" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="/src/css/styles.css" />
+
+    <script type="module" src="/src/js/app.js"></script>
+</head>
+
+<body>
+    <header id="main-header" class="site-header">
+        <nav class="navbar" aria-label="Main navigation">
+            <a href="index.html" class="logo" data-section="home" aria-label="Sleep Well Fit home">
+                <span class="logo-icon" aria-hidden="true">☾</span>
+                <span>SLEEP WELL FIT</span>
+            </a>
+
+            <button type="button" class="menu-toggle" aria-label="Open navigation menu" aria-expanded="false"
+                aria-controls="main-navigation">
+                <span aria-hidden="true">☰</span>
+            </button>
+
+            <ul id="main-navigation" class="navigation-list">
+                <li>
+                    <a href="index.html" class="nav-link active" data-section="home">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="sleep.html" class="nav-link" data-section="sleep">
+                        Sleep
+                    </a>
+                </li>
+
+                <li>
+                    <a href="nutrition.html" class="nav-link" data-section="nutrition">
+                        Nutrition
+                    </a>
+                </li>
+
+                <li>
+                    <a href="fitness.html" class="nav-link" data-section="fitness">
+                        Fitness
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <section id="fitness" class="page-section active-section" aria-labelledby="fitness-title">
+            <div class="page-container">
+                <header class="section-header" id="fitness-header">
+                    <!--  loads fitness header from data.json -->
+                </header>
+
+                <section class="exercise-filters" aria-labelledby="exercise-filter-title">
+                    <h2 id="exercise-filter-title"></h2>
+
+                    <div class="filter-buttons" role="group" aria-label="Filter exercises by body part"
+                        id="fitness-filter-buttons">
+                        <!-- JavaScript loads filter buttons from data.json -->
+                    </div>
+                </section>
+
+                <section class="exercise-results" aria-labelledby="exercise-results-title">
+                    <header class="content-header">
+                        <h2 id="exercise-results-title"></h2>
+                    </header>
+
+                    <div id="exercise-list" class="exercise-list" aria-live="polite"></div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="exercise-modal" class="modal" aria-labelledby="exercise-modal-title">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="exercise-modal-title">Exercise Details</h2>
+
+                <button type="button" class="modal-close" id="exercise-modal-close" aria-label="Close exercise details">
+                    ×
+                </button>
+            </header>
+
+            <div id="exercise-modal-body">
+                <!-- inserts exercise details -->
+            </div>
+        </div>
+    </dialog>
+
+    <footer id="main-footer" class="site-footer">
+        <p>
+            &copy;
+            <span id="currentyear"></span>
+            Sleep Well Fit | Aldana Andrea Portugal Pickling.
+        </p>
+
+        <div class="social-links" aria-label="Social media links">
+            <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram">
+                Instagram
+            </a>
+
+            <a href="https://www.facebook.com/" target="_blank" aria-label="Facebook">
+                Facebook
+            </a>
+
+            <a href="https://www.whatsapp.com/" target="_blank" aria-label="WhatsApp">
+                WhatsApp
+            </a>
+        </div>
+    </footer>
+</body>
+
+</html>

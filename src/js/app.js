@@ -2,32 +2,15 @@ import { initSleep } from "./sleep.js";
 import { initNutrition } from "./nutrition.js";
 import { initFitness } from "./fitness.js";
 
-/* =========================================================
-   APPLICATION CONFIGURATION
-   ========================================================= */
-
-const DEFAULT_SECTION = "home";
-
-const VALID_SECTIONS = ["home", "sleep", "nutrition", "fitness"];
-
 const DATA_URL = "/data.json";
 
-/* =========================================================
-   DOM ELEMENTS
-   ========================================================= */
+const PAGE_MODULES = {
+  "sleep.html": initSleep,
+  "nutrition.html": initNutrition,
+  "fitness.html": initFitness,
+};
 
-const sections = document.querySelectorAll(".page-section");
-
-const navigationLinks = document.querySelectorAll(".nav-link");
-
-const navigationList = document.querySelector("#main-navigation");
-
-const menuToggle = document.querySelector(".menu-toggle");
-
-/* =========================================================
-   LOAD LOCAL JSON DATA
-   ========================================================= */
-
+//json data
 
 async function loadData() {
   try {
@@ -39,36 +22,118 @@ async function loadData() {
       );
     }
 
-    const data = await response.json();
-
-    return data;
+    return await response.json();
   } catch (error) {
     console.error("Error loading local data.json:", error);
     throw error;
   }
 }
 
-/* =========================================================
-   STATIC CONTENT RENDERING
-   ========================================================= */
+//paths detections
 
+function getCurrentPage() {
+  const pathname = window.location.pathname;
+
+  const page = pathname.split("/").pop();
+
+  return page || "index.html";
+}
+
+//Navgitaion
+
+function updateActiveNavigation() {
+  const currentPage = getCurrentPage();
+
+  const navigationLinks = document.querySelectorAll(".nav-link");
+
+  navigationLinks.forEach((link) => {
+    const linkPage = link.getAttribute("href");
+
+    const isActive = linkPage === currentPage;
+
+    link.classList.toggle("active", isActive);
+
+    if (isActive) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+}
+
+//MObile navigation
+//events keydown with escape
+function initMobileNavigation() {
+  const menuToggle = document.querySelector(".menu-toggle");
+  const navigationList = document.querySelector("#main-navigation");
+
+  if (!menuToggle || !navigationList) {
+    return;
+  }
+
+  function toggleMenu(forceState) {
+    const currentlyOpen = navigationList.classList.contains("is-open");
+
+    const shouldOpen =
+      typeof forceState === "boolean" ? forceState : !currentlyOpen;
+
+    navigationList.classList.toggle("is-open", shouldOpen);
+
+    menuToggle.setAttribute("aria-expanded", String(shouldOpen));
+
+    menuToggle.setAttribute(
+      "aria-label",
+      shouldOpen ? "Close navigation menu" : "Open navigation menu",
+    );
+  }
+
+  function closeMenu() {
+    toggleMenu(false);
+  }
+
+  menuToggle.addEventListener("click", () => {
+    toggleMenu();
+  });
+
+  navigationList.addEventListener("click", (event) => {
+    const link = event.target.closest("a");
+
+    if (link) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const clickedInsideNavigation = navigationList.contains(event.target);
+
+    const clickedMenuButton = menuToggle.contains(event.target);
+
+    if (
+      navigationList.classList.contains("is-open") &&
+      !clickedInsideNavigation &&
+      !clickedMenuButton
+    ) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMenu();
+    }
+  });
+}
+
+//Static content
 
 function renderSectionHeader(container, data) {
   if (!container || !data) {
     return;
   }
 
-  const iconMap = {
-    SLEEP: "src/public/sleep.svg",
-    NUTRITION: "src/public/nutrition.svg",
-    FITNESS: "src/public/fitness.svg",
-  };
-
-  const icon = iconMap[data.title] || "";
-
   container.innerHTML = `
     <div class="section-heading-icon" aria-hidden="true">
-      <img src="${data.image}" alt="">
+      <img src="${data.image || ""}" alt="">
     </div>
 
     <div>
@@ -83,13 +148,14 @@ function renderSectionHeader(container, data) {
   `;
 }
 
+//content home
 
 function renderHome(data) {
   const homeHeader = document.querySelector("#home-header");
   const homeCards = document.querySelector("#home-cards");
   const homeCta = document.querySelector("#home-cta");
 
-  if (!homeHeader || !homeCards || !homeCta) {
+  if (!homeHeader || !homeCards || !homeCta || !data) {
     return;
   }
 
@@ -142,13 +208,12 @@ function renderHome(data) {
             ${card.description}
           </p>
 
-          <button
-            type="button"
+          <a
+            href="${card.section}.html"
             class="card-button"
-            data-section="${card.section}"
           >
             ${card.buttonText}
-          </button>
+          </a>
 
         </article>
       `,
@@ -156,84 +221,156 @@ function renderHome(data) {
     .join("");
 
   homeCta.innerHTML = `
-    <button
-      type="button"
+    <a
+      href="${data.cta.section}.html"
       class="primary-button"
-      data-section="${data.cta.section}"
     >
       ${data.cta.text}
-    </button>
+    </a>
   `;
 }
 
+//Sleep content
 
 function renderSleep(data) {
-  renderSectionHeader(document.querySelector("#sleep-header"), data);
+  const header = document.querySelector("#sleep-header");
 
-  document.querySelector("#sleep-calculator-title").textContent =
-    data.calculatorTitle;
+  if (!header || !data) {
+    return;
+  }
 
-  document.querySelector("#bedtime-label").textContent = data.bedtimeLabel;
+  renderSectionHeader(header, data);
 
-  document.querySelector("#wake-time-label").textContent = data.wakeTimeLabel;
+  const calculatorTitle = document.querySelector("#sleep-calculator-title");
 
-  document.querySelector("#calculate-sleep").textContent = data.calculateButton;
+  const bedtimeLabel = document.querySelector("#bedtime-label");
 
-  document.querySelector("#sleep-result-label").textContent = data.resultLabel;
+  const wakeTimeLabel = document.querySelector("#wake-time-label");
 
-  document.querySelector("#save-sleep").textContent = data.saveButton;
+  const calculateButton = document.querySelector("#calculate-sleep");
 
-  document.querySelector("#sleep-history-title").textContent =
-    data.historyTitle;
+  const resultLabel = document.querySelector("#sleep-result-label");
 
-  document.querySelector("#sleep-history-description").textContent =
-    data.historyDescription;
+  const saveButton = document.querySelector("#save-sleep");
 
-  document.querySelector("#sleep-empty-message").textContent =
-    data.emptyMessage;
+  const historyTitle = document.querySelector("#sleep-history-title");
 
-  document.querySelector("#clear-history").textContent =
-    data.clearHistoryButton;
+  const historyDescription = document.querySelector(
+    "#sleep-history-description",
+  );
+
+  const emptyMessage = document.querySelector("#sleep-empty-message");
+
+  const clearHistory = document.querySelector("#clear-history");
+
+  if (calculatorTitle) {
+    calculatorTitle.textContent = data.calculatorTitle;
+  }
+
+  if (bedtimeLabel) {
+    bedtimeLabel.textContent = data.bedtimeLabel;
+  }
+
+  if (wakeTimeLabel) {
+    wakeTimeLabel.textContent = data.wakeTimeLabel;
+  }
+
+  if (calculateButton) {
+    calculateButton.textContent = data.calculateButton;
+  }
+
+  if (resultLabel) {
+    resultLabel.textContent = data.resultLabel;
+  }
+
+  if (saveButton) {
+    saveButton.textContent = data.saveButton;
+  }
+
+  if (historyTitle) {
+    historyTitle.textContent = data.historyTitle;
+  }
+
+  if (historyDescription) {
+    historyDescription.textContent = data.historyDescription;
+  }
+
+  if (emptyMessage) {
+    emptyMessage.textContent = data.emptyMessage;
+  }
+
+  if (clearHistory) {
+    clearHistory.textContent = data.clearHistoryButton;
+  }
 }
 
-/**
- * Renders Nutrition static content using data.json.
- *
- * @param {Object} data - Nutrition data.
- */
+//Nutrition static content
+
 function renderNutrition(data) {
-  renderSectionHeader(document.querySelector("#nutrition-header"), data);
+  const header = document.querySelector("#nutrition-header");
 
-  document.querySelector("#recipe-search").placeholder = data.searchPlaceholder;
+  if (!header || !data) {
+    return;
+  }
 
-  document.querySelector("#recipe-search-button").textContent =
-    data.searchButton;
+  renderSectionHeader(header, data);
 
-  document.querySelector("#recipe-results-title").textContent =
-    data.recipesTitle;
+  const searchInput = document.querySelector("#recipe-search");
 
-  document.querySelector("#favorite-recipes-title").textContent =
-    data.savedRecipesTitle;
+  const searchButton = document.querySelector("#recipe-search-button");
 
-  document.querySelector("#favorite-recipes-description").textContent =
-    data.savedRecipesDescription;
+  const resultsTitle = document.querySelector("#recipe-results-title");
+
+  const favoritesTitle = document.querySelector("#favorite-recipes-title");
+
+  const favoritesDescription = document.querySelector(
+    "#favorite-recipes-description",
+  );
+
+  if (searchInput) {
+    searchInput.placeholder = data.searchPlaceholder;
+  }
+
+  if (searchButton) {
+    searchButton.textContent = data.searchButton;
+  }
+
+  if (resultsTitle) {
+    resultsTitle.textContent = data.recipesTitle;
+  }
+
+  if (favoritesTitle) {
+    favoritesTitle.textContent = data.savedRecipesTitle;
+  }
+
+  if (favoritesDescription) {
+    favoritesDescription.textContent = data.savedRecipesDescription;
+  }
 }
 
-/**
- * Renders Fitness static content using data.json.
- *
- * @param {Object} data - Fitness data.
- */
+//Fitness static content
 function renderFitness(data) {
-  renderSectionHeader(document.querySelector("#fitness-header"), data);
+  const header = document.querySelector("#fitness-header");
 
-  document.querySelector("#exercise-filter-title").textContent =
-    data.filterTitle;
+  if (!header || !data) {
+    return;
+  }
 
-  document.querySelector("#exercise-results-title").textContent =
-    data.exerciseTitle;
+  renderSectionHeader(header, data);
+
+  const filterTitle = document.querySelector("#exercise-filter-title");
+
+  const exerciseTitle = document.querySelector("#exercise-results-title");
 
   const filterContainer = document.querySelector("#fitness-filter-buttons");
+
+  if (filterTitle) {
+    filterTitle.textContent = data.filterTitle;
+  }
+
+  if (exerciseTitle) {
+    exerciseTitle.textContent = data.exerciseTitle;
+  }
 
   if (!filterContainer) {
     return;
@@ -255,318 +392,84 @@ function renderFitness(data) {
     .join("");
 }
 
-/**
- * Renders all static content from data.json.
- *
- * @param {Object} data - Complete application data.
- */
-function renderStaticContent(data) {
-  renderHome(data.home);
-  renderSleep(data.sleep);
-  renderNutrition(data.nutrition);
-  renderFitness(data.fitness);
-}
+//static content for the current page only
 
-/* =========================================================
-   NAVIGATION HELPERS
-   ========================================================= */
+function renderCurrentPageContent(data) {
+  const currentPage = getCurrentPage();
 
-/**
- * Returns the section requested by the URL hash.
- *
- * @returns {string} Valid section name.
- */
-function getSectionFromHash() {
-  const hash = window.location.hash.replace("#", "").trim();
-
-  if (VALID_SECTIONS.includes(hash)) {
-    return hash;
+  if (currentPage === "index.html") {
+    renderHome(data.home);
   }
 
-  return DEFAULT_SECTION;
-}
-
-/**
- * Updates the active state of navigation links.
- *
- * @param {string} sectionId - Current section.
- */
-function updateNavigation(sectionId) {
-  navigationLinks.forEach((link) => {
-    const isActive = link.dataset.section === sectionId;
-
-    link.classList.toggle("active", isActive);
-
-    link.setAttribute("aria-current", isActive ? "page" : "false");
-  });
-}
-
-/**
- * Shows only the requested application section.
- *
- * @param {string} sectionId - Section to display.
- */
-function showSection(sectionId) {
-  const validSection = VALID_SECTIONS.includes(sectionId)
-    ? sectionId
-    : DEFAULT_SECTION;
-
-  sections.forEach((section) => {
-    const isVisible = section.id === validSection;
-
-    section.hidden = !isVisible;
-
-    section.classList.toggle("active-section", isVisible);
-  });
-
-  updateNavigation(validSection);
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-}
-
-/**
- * Navigates to a section and updates the URL hash.
- *
- * @param {string} sectionId - Target section.
- */
-function navigateTo(sectionId) {
-  if (!VALID_SECTIONS.includes(sectionId)) {
-    sectionId = DEFAULT_SECTION;
+  if (currentPage === "sleep.html") {
+    renderSleep(data.sleep);
   }
 
-  if (window.location.hash !== `#${sectionId}`) {
-    window.location.hash = sectionId;
-  } else {
-    showSection(sectionId);
+  if (currentPage === "nutrition.html") {
+    renderNutrition(data.nutrition);
+  }
+
+  if (currentPage === "fitness.html") {
+    renderFitness(data.fitness);
   }
 }
 
-/* =========================================================
-   MOBILE NAVIGATION
-   ========================================================= */
+//Mobile Initializes the module belonging to the current page
 
-/**
- * Opens or closes the mobile navigation menu.
- *
- * @param {boolean} forceState - Optional forced state.
- */
-function toggleMobileMenu(forceState) {
-  if (!navigationList || !menuToggle) {
+async function initializeCurrentModule() {
+  const currentPage = getCurrentPage();
+
+  const moduleInitializer = PAGE_MODULES[currentPage];
+
+  if (!moduleInitializer) {
     return;
   }
 
-  const isCurrentlyOpen = navigationList.classList.contains("is-open");
-
-  const shouldOpen =
-    typeof forceState === "boolean" ? forceState : !isCurrentlyOpen;
-
-  navigationList.classList.toggle("is-open", shouldOpen);
-
-  menuToggle.setAttribute("aria-expanded", String(shouldOpen));
-
-  menuToggle.setAttribute(
-    "aria-label",
-    shouldOpen ? "Close navigation menu" : "Open navigation menu",
-  );
-}
-
-/**
- * Closes the mobile menu.
- */
-function closeMobileMenu() {
-  toggleMobileMenu(false);
-}
-
-/* =========================================================
-   EVENT HANDLERS
-   ========================================================= */
-
-/**
- * Handles clicks on elements with data-section.
- *
- * @param {MouseEvent} event - Click event.
- */
-function handleSectionClick(event) {
-  const target = event.target.closest("[data-section]");
-
-  if (!target) {
-    return;
-  }
-
-  const sectionId = target.dataset.section;
-
-  if (!sectionId) {
-    return;
-  }
-
-  if (target.tagName.toLowerCase() === "a") {
-    closeMobileMenu();
-    return;
-  }
-
-  event.preventDefault();
-
-  navigateTo(sectionId);
-
-  closeMobileMenu();
-}
-
-/**
- * Handles browser hash changes.
- */
-function handleHashChange() {
-  const sectionId = getSectionFromHash();
-
-  showSection(sectionId);
-
-  closeMobileMenu();
-}
-
-/**
- * Handles the mobile navigation button.
- */
-function handleMenuToggle() {
-  toggleMobileMenu();
-}
-
-/**
- * Closes the mobile menu when clicking outside it.
- *
- * @param {MouseEvent} event - Click event.
- */
-function handleDocumentClick(event) {
-  if (!navigationList || !menuToggle) {
-    return;
-  }
-
-  const clickedInsideNavigation = navigationList.contains(event.target);
-
-  const clickedMenuButton = menuToggle.contains(event.target);
-
-  if (
-    navigationList.classList.contains("is-open") &&
-    !clickedInsideNavigation &&
-    !clickedMenuButton
-  ) {
-    closeMobileMenu();
-  }
-}
-
-/**
- * Closes the mobile navigation with Escape.
- *
- * @param {KeyboardEvent} event - Keyboard event.
- */
-function handleKeyboard(event) {
-  if (event.key !== "Escape") {
-    return;
-  }
-
-  closeMobileMenu();
-}
-
-/* =========================================================
-   EVENT LISTENERS
-   ========================================================= */
-
-function setupNavigation() {
-  /*
-   * The Home buttons are now created dynamically
-   * from data.json, so they must be selected here,
-   * after the JSON has been rendered.
-   */
-  const sectionButtons = document.querySelectorAll("[data-section]");
-
-  sectionButtons.forEach((button) => {
-    button.addEventListener("click", handleSectionClick);
-  });
-
-  window.addEventListener("hashchange", handleHashChange);
-
-  if (menuToggle) {
-    menuToggle.addEventListener("click", handleMenuToggle);
-  }
-
-  document.addEventListener("click", handleDocumentClick);
-
-  document.addEventListener("keydown", handleKeyboard);
-}
-
-/* =========================================================
-   MODULE INITIALIZATION
-   ========================================================= */
-
-/**
- * Initializes all application components.
- */
-async function initApp() {
-  /*
-   * First load the local JSON file.
-   */
   try {
+    await moduleInitializer();
+  } catch (error) {
+    console.error(`Unable to initialize ${currentPage}:`, error);
+  }
+}
+
+//Aplication initilization
+
+async function initApp() {
+  try {
+    //Header and footer are now included, directly in every HTML page.
+
+    updateActiveNavigation();
+
+    initMobileNavigation();
+
+    //Get the current year
+
+    const currentYear = document.querySelector("#currentyear");
+
+    if (currentYear) {
+      currentYear.textContent = new Date().getFullYear();
+    }
+
+    //Load local static content
     const data = await loadData();
 
-    /*
-     * Inject all static content from data.json
-     * into the existing HTML containers.
-     */
-    renderStaticContent(data);
+    renderCurrentPageContent(data);
+
+    //Initialize only the module, required by the current page
+    await initializeCurrentModule();
   } catch (error) {
-    console.error("Application data initialization failed:", error);
-
-    return;
-  }
-
-  /*
-   * Set the initial SPA section after
-   * the static content has been rendered.
-   */
-  showSection(getSectionFromHash());
-
-  setupNavigation();
-
-  /*
-   * Initialize each independent module.
-   */
-  try {
-    initSleep();
-  } catch (error) {
-    console.error("Sleep module initialization failed:", error);
-  }
-
-  try {
-    await initNutrition();
-  } catch (error) {
-    console.error("Nutrition module initialization failed:", error);
-  }
-
-  try {
-    await initFitness();
-  } catch (error) {
-    console.error("Fitness module initialization failed:", error);
+    console.error("Application initialization failed:", error);
   }
 }
 
-/* =========================================================
-   APPLICATION START
-   ========================================================= */
+//start application
 
 document.addEventListener("DOMContentLoaded", initApp);
 
-document.querySelector("#currentyear").textContent = new Date().getFullYear();
-
-/* =========================================================
-   MODULE EXPORTS
-   ========================================================= */
-
 export {
   initApp,
-  showSection,
-  navigateTo,
-  getSectionFromHash,
   loadData,
-  renderStaticContent,
+  getCurrentPage,
+  updateActiveNavigation,
+  renderCurrentPageContent,
 };

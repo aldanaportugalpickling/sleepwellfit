@@ -1,16 +1,3 @@
-/* =========================================================
-   SLEEP WELL FIT
-   Fitness Module - wger Exercise API
-   ---------------------------------------------------------
-   Responsibilities:
-   - Connect to wger Exercise API
-   - Load exercises
-   - Filter exercises by muscle group
-   - Render exercise cards
-   - Display exercise details in a modal
-   - Handle API loading and error states
-   ========================================================= */
-
 const API_URL = "https://wger.de/api/v2/exerciseinfo/?language=2&limit=100";
 
 const MUSCLE_FILTERS = {
@@ -30,7 +17,6 @@ const MUSCLE_FILTERS = {
   abs: ["abs", "abdominals", "abdominal", "rectus abdominis", "obliques"],
 };
 
-
 const exerciseList = document.querySelector("#exercise-list");
 
 const exerciseModal = document.querySelector("#exercise-modal");
@@ -41,8 +27,6 @@ const exerciseModalTitle = document.querySelector("#exercise-modal-title");
 
 const exerciseModalClose = document.querySelector("#exercise-modal-close");
 
-//const filterButtons = document.querySelectorAll(".filter-button");
-
 //Aplication state.
 
 let allExercises = [];
@@ -50,12 +34,7 @@ let allExercises = [];
 let currentFilter = "chest";
 
 //Security.
-/**
- * Escapes text before inserting it into HTML.
- *
- * @param {string} value - Text to escape.
- * @returns {string} Safe HTML string.
- */
+
 function escapeHTML(value = "") {
   const element = document.createElement("div");
 
@@ -64,13 +43,8 @@ function escapeHTML(value = "") {
   return element.innerHTML;
 }
 
-/**
- * Removes HTML tags from descriptions returned by
- * the wger API.
- *
- * @param {string} html - HTML description.
- * @returns {string} Plain text description.
- */
+//Removes HTML tags from descriptions returned by the wger API
+
 function stripHTML(html = "") {
   const element = document.createElement("div");
 
@@ -79,13 +53,8 @@ function stripHTML(html = "") {
   return element.textContent.replace(/\s+/g, " ").trim();
 }
 
-/**
- * Creates a short description for exercise cards.
- *
- * @param {string} description - Exercise description.
- * @param {number} maxLength - Maximum number of characters.
- * @returns {string} Short description.
- */
+// description for exercise cards
+
 function truncateText(description, maxLength = 150) {
   const text = stripHTML(description);
 
@@ -98,11 +67,8 @@ function truncateText(description, maxLength = 150) {
 
 //API
 
-/**
- * Retrieves exercises from the wger API.
- *
- * @returns {Promise<Array>} Exercise results.
- */
+//get exercises from the wger API
+
 async function fetchExercises() {
   try {
     const response = await fetch(API_URL);
@@ -122,16 +88,8 @@ async function fetchExercises() {
 }
 
 //Exercise data helpers.
+// Gets muscle names from a wger exercise
 
-/**
- * Gets muscle names from a wger exercise.
- *
- * wger may return muscles as objects containing
- * a translated name, depending on the API response.
- *
- * @param {Object} exercise - wger exercise.
- * @returns {Array<string>} Muscle names.
- */
 function getMuscleNames(exercise) {
   if (!Array.isArray(exercise.muscles)) {
     return [];
@@ -149,12 +107,8 @@ function getMuscleNames(exercise) {
     .map((muscle) => muscle.toLowerCase().trim());
 }
 
-/**
- * Gets the category name from an exercise.
- *
- * @param {Object} exercise - wger exercise.
- * @returns {string} Category name.
- */
+// category name from an exercise.
+
 function getCategoryName(exercise) {
   if (!exercise.category) {
     return "General";
@@ -167,12 +121,6 @@ function getCategoryName(exercise) {
   return exercise.category.name || "General";
 }
 
-/**
- * Gets equipment names from an exercise.
- *
- * @param {Object} exercise - wger exercise.
- * @returns {Array<string>} Equipment names.
- */
 function getEquipmentNames(exercise) {
   if (!Array.isArray(exercise.equipment)) {
     return [];
@@ -189,32 +137,20 @@ function getEquipmentNames(exercise) {
     .filter(Boolean);
 }
 
-/**
- * Returns the best available exercise image.
- *
- * @param {Object} exercise - wger exercise.
- * @returns {string|null} Image URL.
- */
 function getExerciseImage(exercise) {
-  if (Array.isArray(exercise.images) && exercise.images.length > 0) {
-    const image = exercise.images[0];
-
-    if (typeof image === "string") {
-      return image;
-    }
-
-    return image.image || image.image_thumbnail || null;
+  if (!Array.isArray(exercise.images) || exercise.images.length === 0) {
+    return null;
   }
 
-  return null;
+  const image = exercise.images[0];
+
+  if (typeof image === "string") {
+    return image;
+  }
+
+  return image.image || image.image_thumbnail || null;
 }
 
-/**
- * Returns a readable muscle label.
- *
- * @param {Object} exercise - wger exercise.
- * @returns {string} Muscle label.
- */
 function getMuscleLabel(exercise) {
   const muscles = getMuscleNames(exercise);
 
@@ -232,17 +168,9 @@ function getMuscleLabel(exercise) {
   return getCategoryName(exercise);
 }
 
-
 //Filtering
+//whether an exercise belongs to the selected muscle group
 
-/**
- * Determines whether an exercise belongs to
- * the selected muscle group.
- *
- * @param {Object} exercise - wger exercise.
- * @param {string} muscleGroup - Selected muscle group.
- * @returns {boolean} Whether exercise matches.
- */
 function matchesMuscle(exercise, muscleGroup) {
   const acceptedMuscles = MUSCLE_FILTERS[muscleGroup];
 
@@ -257,12 +185,8 @@ function matchesMuscle(exercise, muscleGroup) {
   );
 }
 
-/**
- * Filters all loaded exercises.
- *
- * @param {string} muscleGroup - Muscle filter.
- * @returns {Array} Filtered exercises.
- */
+//Filters all loaded exercises
+
 function filterExercises(muscleGroup) {
   if (muscleGroup === "all") {
     return allExercises;
@@ -273,11 +197,8 @@ function filterExercises(muscleGroup) {
   );
 }
 
-/**
- * Applies the selected filter and updates the UI.
- *
- * @param {string} muscleGroup - Selected muscle.
- */
+//elected filter and updates the UI.
+
 function applyMuscleFilter(muscleGroup) {
   currentFilter = muscleGroup;
 
@@ -287,24 +208,6 @@ function applyMuscleFilter(muscleGroup) {
 
   updateFilterButtons(muscleGroup);
 }
-
-/**
- * Updates active filter button states.
- *
- * @param {string} activeFilter - Selected filter.
- */
-//function updateFilterButtons(activeFilter) {
-  //filterButtons.forEach((button) => {
-    //const isActive = button.dataset.muscle === activeFilter;
-
-    //button.classList.toggle("active", isActive);
-
-    //button.setAttribute("aria-pressed", String(isActive));
-  //});
-//}
-
-
-//my code
 
 function updateFilterButtons(activeFilter) {
   const filterButtons = document.querySelectorAll(".filter-button");
@@ -318,61 +221,51 @@ function updateFilterButtons(activeFilter) {
   });
 }
 
-//exercise cards
+//Creates exercise cards- wger API
 
-/**
- * Creates an exercise card.
- *
- * @param {Object} exercise - wger exercise.
- * @returns {HTMLElement} Exercise card.
- */
-function createExerciseCard(exercise) {
+// added new code
+function getExerciseTranslation(exercise) {
+  if (!Array.isArray(exercise.translations)) {
+    return null;
+  }
 
-
-  //ADDEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
-const image = getExerciseImage(exercise);
-
-// Do not display exercises without an image
-if (!image) {
-  return null;
+  return (
+    exercise.translations.find(
+      (translation) => Number(translation.language) === 2,
+    ) ||
+    exercise.translations[0] ||
+    null
+  );
 }
-//HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
+function createExerciseCard(exercise) {
+  // Do not display exercises without an image
+  const image = getExerciseImage(exercise);
+
+  if (!image) {
+    return null;
+  }
+
+  const translation = getExerciseTranslation(exercise);
+
+  const name = translation?.name || "Exercise";
+  const description = translation?.description || "";
   const card = document.createElement("article");
 
   card.className = "exercise-card";
 
-  const name = exercise.name || "Unnamed Exercise";
-  
-  const description = exercise.description || "";
-
   const muscle = getMuscleLabel(exercise);
-
   const equipment = getEquipmentNames(exercise);
-
   const category = getCategoryName(exercise);
 
-  //HERE DELETE THE PLACEHOLDER 
-  //const image = getExerciseImage(exercise);
-
-  const imageHTML = image
-    ? `
-      <img
-        class="exercise-image"
-        src="${escapeHTML(image)}"
-        alt="${escapeHTML(name)} demonstration"
-        loading="lazy"
-      />
-    `
-    : `
-      <div
-        class="exercise-image exercise-image-placeholder"
-        role="img"
-        aria-label="Exercise image not available"
-      >
-        <span aria-hidden="true">🏋</span>
-      </div>
-    `;
+  const imageHTML = `
+    <img
+      class="exercise-image"
+      src="${escapeHTML(image)}"
+      alt="${escapeHTML(name)} demonstration"
+      loading="lazy"
+    />
+  `;
 
   card.innerHTML = `
     ${imageHTML}
@@ -390,11 +283,10 @@ if (!image) {
 
         <span>
           <strong>Equipment:</strong>
-          ${
-            equipment.length > 0
-              ? escapeHTML(equipment.join(", "))
-              : "Body Only"
-          }
+          ${equipment.length > 0
+      ? escapeHTML(equipment.join(", "))
+      : "Body Only"
+    }
         </span>
 
         <span>
@@ -421,13 +313,8 @@ if (!image) {
   return card;
 }
 
-/* =========================================================
-   RENDER EXERCISES
-   ========================================================= */
+//Displays a loading state
 
-/**
- * Displays a loading state.
- */
 function showLoading() {
   exerciseList.innerHTML = `
     <div class="loading">
@@ -436,9 +323,8 @@ function showLoading() {
   `;
 }
 
-/**
- * Displays an API error.
- */
+//Displays an API error
+
 function showError() {
   exerciseList.innerHTML = `
     <div class="error-message">
@@ -450,9 +336,7 @@ function showError() {
   `;
 }
 
-/**
- * Displays a no-results message.
- */
+//Displays a no-results message
 function showNoExercises() {
   exerciseList.innerHTML = `
     <div class="no-results">
@@ -463,11 +347,8 @@ function showNoExercises() {
   `;
 }
 
-/**
- * Renders a list of exercises.
- *
- * @param {Array} exercises - Exercises to display.
- */
+// list of exercises
+
 function renderExercises(exercises) {
   exerciseList.innerHTML = "";
 
@@ -479,39 +360,31 @@ function renderExercises(exercises) {
   const fragment = document.createDocumentFragment();
 
   exercises.forEach((exercise) => {
-
-    //HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    //new script
     const card = createExerciseCard(exercise);
 
-  if (card) {
-    fragment.appendChild(card);
-  }
-});
-  //HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    //fragment.appendChild(createExerciseCard(exercise));
-  //});
+    if (card) {
+      fragment.appendChild(card);
+    }
+  });
 
   exerciseList.appendChild(fragment);
 }
 
-/* =========================================================
-   EXERCISE DETAILS
-   ========================================================= */
+//exercise details...
 
-/**
- * Opens the exercise details modal.
- *
- * @param {Object} exercise - Exercise object.
- */
+//Opens the exercise details modal
 function openExerciseModal(exercise) {
   if (!exercise) {
     return;
   }
 
-  const name = exercise.name || "Exercise Details";
+  const translation = getExerciseTranslation(exercise);
+
+  const name = translation?.name || "Exercise Details";
 
   const description = stripHTML(
-    exercise.description || "No description available.",
+    translation?.description || "No description available.",
   );
 
   const muscle = getMuscleLabel(exercise);
@@ -525,16 +398,15 @@ function openExerciseModal(exercise) {
   exerciseModalTitle.textContent = name;
 
   exerciseModalBody.innerHTML = `
-    ${
-      image
-        ? `
+    ${image
+      ? `
           <img
             class="modal-image"
             src="${escapeHTML(image)}"
             alt="${escapeHTML(name)} demonstration"
           />
         `
-        : ""
+      : ""
     }
 
     <div class="exercise-meta">
@@ -568,9 +440,7 @@ function openExerciseModal(exercise) {
   }
 }
 
-/**
- * Closes the exercise details modal.
- */
+//Closes the exercise details modal
 function closeExerciseModal() {
   if (typeof exerciseModal.close === "function") {
     exerciseModal.close();
@@ -579,15 +449,10 @@ function closeExerciseModal() {
   }
 }
 
-/* =========================================================
-   EVENT HANDLERS
-   ========================================================= */
+//EVENT HANDLERS...
 
-/**
- * Handles muscle filter button clicks.
- *
- * @param {MouseEvent} event - Click event.
- */
+//Handles muscle filter button clicks
+
 function handleFilterClick(event) {
   const button = event.currentTarget;
 
@@ -600,14 +465,8 @@ function handleFilterClick(event) {
   applyMuscleFilter(muscle);
 }
 
-/**
- * Handles exercise card clicks.
- *
- * Uses event delegation because cards are generated
- * dynamically from the API.
- *
- * @param {MouseEvent} event - Click event.
- */
+//Handles exercise card clicks
+
 function handleExerciseListClick(event) {
   const button = event.target.closest("[data-exercise-id]");
 
@@ -624,28 +483,18 @@ function handleExerciseListClick(event) {
   }
 }
 
-/**
- * Closes the modal when the user clicks
- * outside the modal content.
- *
- * @param {MouseEvent} event - Click event.
- */
+//Closes the modal when the user clicks  outside the modal content
+
 function handleModalBackdropClick(event) {
   if (event.target === exerciseModal) {
     closeExerciseModal();
   }
 }
 
-/* =========================================================
-   INITIALIZATION
-   ========================================================= */
+//INITIALIZATION FITNESS MODULE...
 
-/**
- * Initializes the Fitness module.
- *
- * The initial filter is Chest to match the
- * project wireframe.
- */
+//The initial filter is Chest to match the project
+
 async function initFitness() {
   if (!exerciseList) {
     return;
@@ -653,8 +502,7 @@ async function initFitness() {
 
   showLoading();
 
-
-   const filterButtons = document.querySelectorAll(".filter-button");
+  const filterButtons = document.querySelectorAll(".filter-button");
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", handleFilterClick);
@@ -673,19 +521,13 @@ async function initFitness() {
   try {
     allExercises = await fetchExercises();
 
-    /*
-     * Start with Chest selected,
-     * matching the wireframe.
-     */
+    //Start with Chest selected
+
     applyMuscleFilter(currentFilter);
   } catch (error) {
     showError();
   }
 }
-
-/* =========================================================
-   MODULE EXPORTS
-   ========================================================= */
 
 export {
   initFitness,

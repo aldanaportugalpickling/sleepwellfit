@@ -1,24 +1,8 @@
-/* =========================================================
-   SLEEP WELL FIT
-   Nutrition Module - TheMealDB API
-   ---------------------------------------------------------
-   Responsibilities:
-   - Search recipes using TheMealDB API
-   - Render recipe cards
-   - Open recipe details in a modal
-   - Display ingredients and instructions
-   - Add/remove favorite recipes
-   - Persist favorites using localStorage
-   ========================================================= */
-
 const API_URL = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
 const FAVORITES_KEY = "sleepWellFitFavorites";
 
-/* =========================================================
-   DOM ELEMENTS
-   ========================================================= */
-
+//Here DOM elements
 const searchForm = document.querySelector("#recipe-search-form");
 const searchInput = document.querySelector("#recipe-search");
 const recipeList = document.querySelector("#recipe-list");
@@ -29,16 +13,8 @@ const recipeModalBody = document.querySelector("#recipe-modal-body");
 const recipeModalTitle = document.querySelector("#recipe-modal-title");
 const recipeModalClose = document.querySelector("#recipe-modal-close");
 
-/* =========================================================
-   API
-   ========================================================= */
+//Seacrh recipes from API
 
-/**
- * Searches TheMealDB for recipes.
- *
- * @param {string} query - Search term.
- * @returns {Promise<Array>} Array of recipes.
- */
 async function searchRecipes(query) {
   try {
     const response = await fetch(`${API_URL}${encodeURIComponent(query)}`);
@@ -56,12 +32,8 @@ async function searchRecipes(query) {
   }
 }
 
-/**
- * Retrieves a single recipe by its ID.
- *
- * @param {string} id - TheMealDB recipe ID.
- * @returns {Promise<Object|null>} Recipe object.
- */
+//get  a single recipe by its ID
+
 async function getRecipeById(id) {
   try {
     const response = await fetch(
@@ -81,16 +53,10 @@ async function getRecipeById(id) {
   }
 }
 
-/* =========================================================
-   SECURITY / HTML HELPERS
-   ========================================================= */
+//security html
 
-/**
- * Escapes text before inserting it into HTML.
- *
- * @param {string} value - Text to escape.
- * @returns {string} Safe HTML string.
- */
+//Escapes text before inserting it into HTML.
+
 function escapeHTML(value = "") {
   const element = document.createElement("div");
 
@@ -99,15 +65,9 @@ function escapeHTML(value = "") {
   return element.innerHTML;
 }
 
-/* =========================================================
-   LOCAL STORAGE - FAVORITES
-   ========================================================= */
+//LOCALSTORAGE...
+// Load favorites from localStorage
 
-/**
- * Gets all favorite recipes from localStorage.
- *
- * @returns {Array} Favorite recipes.
- */
 function getFavorites() {
   try {
     const storedFavorites = localStorage.getItem(FAVORITES_KEY);
@@ -126,11 +86,8 @@ function getFavorites() {
   }
 }
 
-/**
- * Saves favorite recipes to localStorage.
- *
- * @param {Array} favorites - Favorite recipes.
- */
+//Saves favorite recipes to localStorage
+
 function saveFavorites(favorites) {
   try {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
@@ -139,21 +96,14 @@ function saveFavorites(favorites) {
   }
 }
 
-/**
- * Checks whether a recipe is already a favorite.
- *
- * @param {string} recipeId - Recipe ID.
- * @returns {boolean} True if favorite.
- */
+// Check if recipe is in favorites
+
 function isFavorite(recipeId) {
   return getFavorites().some((recipe) => recipe.idMeal === recipeId);
 }
 
-/**
- * Adds or removes a recipe from favorites.
- *
- * @param {Object} recipe - Recipe object.
- */
+// adds or removes a recipe from favorites
+
 function toggleFavorite(recipe) {
   const favorites = getFavorites();
 
@@ -171,18 +121,13 @@ function toggleFavorite(recipe) {
 
   renderFavorites();
 
-  /*
-   * Update the favorite state on the currently
-   * visible search results.
-   */
+  // refresh favorite status in current search results
+
   updateFavoriteButtons(recipe.idMeal);
 }
 
-/**
- * Updates all favorite buttons associated with a recipe.
- *
- * @param {string} recipeId - Recipe ID.
- */
+//updates all favorite buttons associated with a recipe
+
 function updateFavoriteButtons(recipeId) {
   const buttons = document.querySelectorAll(`[data-favorite-id="${recipeId}"]`);
 
@@ -202,16 +147,10 @@ function updateFavoriteButtons(recipeId) {
   });
 }
 
-/* =========================================================
-   RECIPE CARD
-   ========================================================= */
+//Recipe card...
 
-/**
- * Creates a recipe card.
- *
- * @param {Object} recipe - TheMealDB recipe.
- * @returns {HTMLElement} Recipe card.
- */
+//Creates a recipe card
+
 function createRecipeCard(recipe) {
   const card = document.createElement("article");
 
@@ -268,15 +207,8 @@ function createRecipeCard(recipe) {
   return card;
 }
 
-/* =========================================================
-   RENDER SEARCH RESULTS
-   ========================================================= */
+//displays a loading message
 
-/**
- * Displays a loading message.
- *
- * @param {HTMLElement} container - Target container.
- */
 function showLoading(container) {
   container.innerHTML = `
     <div class="loading">
@@ -285,11 +217,8 @@ function showLoading(container) {
   `;
 }
 
-/**
- * Displays an error message.
- *
- * @param {HTMLElement} container - Target container.
- */
+//displays an error message
+
 function showError(container) {
   container.innerHTML = `
     <div class="error-message">
@@ -301,11 +230,8 @@ function showError(container) {
   `;
 }
 
-/**
- * Displays a no-results message.
- *
- * @param {HTMLElement} container - Target container.
- */
+//Displays a no-results message
+
 function showNoResults(container) {
   container.innerHTML = `
     <div class="no-results">
@@ -317,11 +243,8 @@ function showNoResults(container) {
   `;
 }
 
-/**
- * Renders recipe search results.
- *
- * @param {Array} recipes - Recipes returned by API.
- */
+//Renders recipe search results
+
 function renderRecipes(recipes) {
   recipeList.innerHTML = "";
 
@@ -339,13 +262,8 @@ function renderRecipes(recipes) {
   recipeList.appendChild(fragment);
 }
 
-/* =========================================================
-   FAVORITES UI
-   ========================================================= */
+// saved favorite recipes
 
-/**
- * Renders saved favorite recipes.
- */
 function renderFavorites() {
   const favorites = getFavorites();
 
@@ -372,17 +290,8 @@ function renderFavorites() {
   favoriteList.appendChild(fragment);
 }
 
-/* =========================================================
-   RECIPE MODAL
-   ========================================================= */
+//Obtain TheMealDB recipe
 
-/**
- * Extracts all ingredients and measurements from
- * a TheMealDB recipe.
- *
- * @param {Object} recipe - TheMealDB recipe.
- * @returns {Array} Ingredient objects.
- */
 function getIngredients(recipe) {
   const ingredients = [];
 
@@ -402,12 +311,8 @@ function getIngredients(recipe) {
   return ingredients;
 }
 
-/**
- * Creates the ingredient list HTML.
- *
- * @param {Object} recipe - TheMealDB recipe.
- * @returns {string} Ingredient list.
- */
+// Creates the ingredient list HTML
+
 function createIngredientList(recipe) {
   const ingredients = getIngredients(recipe);
 
@@ -427,11 +332,8 @@ function createIngredientList(recipe) {
     .join("");
 }
 
-/**
- * Opens the recipe modal.
- *
- * @param {Object} recipe - Complete recipe object.
- */
+// Opens the recipe modal
+
 function openRecipeModal(recipe) {
   if (!recipe) {
     return;
@@ -478,9 +380,8 @@ function openRecipeModal(recipe) {
   }
 }
 
-/**
- * Closes the recipe modal.
- */
+// Closes the recipe modal
+
 function closeRecipeModal() {
   if (typeof recipeModal.close === "function") {
     recipeModal.close();
@@ -489,15 +390,8 @@ function closeRecipeModal() {
   }
 }
 
-/* =========================================================
-   CARD EVENT HANDLING
-   ========================================================= */
+//click event
 
-/**
- * Handles clicks inside recipe result containers.
- *
- * @param {MouseEvent} event - Click event.
- */
 async function handleRecipeListClick(event) {
   const favoriteButton = event.target.closest(".favorite-button");
 
@@ -510,13 +404,8 @@ async function handleRecipeListClick(event) {
       return;
     }
 
-    /*
-     * If the recipe already exists in favorites,
-     * remove it directly.
-     *
-     * Otherwise retrieve the complete recipe
-     * from the API before saving it.
-     */
+    //If recipe is in favorites, remove it.
+
     const favorites = getFavorites();
 
     const existingRecipe = favorites.find(
@@ -556,15 +445,7 @@ async function handleRecipeListClick(event) {
   }
 }
 
-/* =========================================================
-   SEARCH
-   ========================================================= */
-
-/**
- * Handles recipe search.
- *
- * @param {SubmitEvent} event - Submit event.
- */
+//search
 async function handleSearch(event) {
   event.preventDefault();
 
@@ -586,9 +467,7 @@ async function handleSearch(event) {
   }
 }
 
-/* =========================================================
-   MODAL EVENTS
-   ========================================================= */
+//Modal events
 
 function handleModalBackdropClick(event) {
   if (event.target === recipeModal) {
@@ -596,13 +475,8 @@ function handleModalBackdropClick(event) {
   }
 }
 
-/* =========================================================
-   INITIALIZATION
-   ========================================================= */
+//Initialization nutrition module...
 
-/**
- * Initializes the nutrition module.
- */
 function initNutrition() {
   if (!searchForm || !searchInput || !recipeList || !favoriteList) {
     return;
@@ -624,19 +498,11 @@ function initNutrition() {
 
   renderFavorites();
 
-  /*
-   * Initial recipe search.
-   * This gives the Nutrition page useful content
-   * immediately instead of showing an empty page.
-   */
+  //Initial recipe search to ensure the Nutrition page
   searchInput.value = "chicken";
 
   handleSearch(new Event("submit"));
 }
-
-/* =========================================================
-   MODULE EXPORTS
-   ========================================================= */
 
 export {
   initNutrition,

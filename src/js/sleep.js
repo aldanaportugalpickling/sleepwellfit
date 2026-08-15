@@ -1,22 +1,6 @@
-/* =========================================================
-   SLEEP WELL FIT
-   Sleep Tracker Module
-   ---------------------------------------------------------
-   Responsibilities:
-   - Calculate sleep duration
-   - Handle overnight sleep
-   - Save sleep records to localStorage
-   - Render sleep history
-   - Delete individual records
-   - Clear complete history
-   ========================================================= */
-
 const STORAGE_KEY = "sleepWellFitHistory";
 
-/* =========================================================
-   DOM ELEMENTS
-   ========================================================= */
-
+//Dom elements here
 const sleepForm = document.querySelector("#sleep-form");
 const bedtimeInput = document.querySelector("#bedtime");
 const wakeTimeInput = document.querySelector("#wake-time");
@@ -26,21 +10,12 @@ const saveSleepButton = document.querySelector("#save-sleep");
 const historyList = document.querySelector("#sleep-history-list");
 const clearHistoryButton = document.querySelector("#clear-history");
 
-/* =========================================================
-   APPLICATION STATE
-   ========================================================= */
-
 let currentSleepRecord = null;
 
-/* =========================================================
-   LOCAL STORAGE
-   ========================================================= */
+//LOCAL STORAGE
 
-/**
- * Retrieves the complete sleep history from localStorage.
- *
- * @returns {Array} Sleep history records.
- */
+// Load full sleep history from localStorage
+
 function getSleepHistory() {
   try {
     const storedHistory = localStorage.getItem(STORAGE_KEY);
@@ -58,11 +33,8 @@ function getSleepHistory() {
   }
 }
 
-/**
- * Saves the complete sleep history to localStorage.
- *
- * @param {Array} history - Sleep history records.
- */
+//Saves the complete sleep history records
+
 function setSleepHistory(history) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
@@ -71,43 +43,25 @@ function setSleepHistory(history) {
   }
 }
 
-/* =========================================================
-   SLEEP CALCULATION
-   ========================================================= */
+//SLEEP CALCULATION
 
-/**
- * Converts a HH:MM time string into minutes after midnight.
- *
- * @param {string} time - Time in HH:MM format.
- * @returns {number} Minutes after midnight.
- */
+// Convert h:m string to minutes since midnight
+
 function timeToMinutes(time) {
   const [hours, minutes] = time.split(":").map(Number);
 
   return hours * 60 + minutes;
 }
 
-/**
- * Calculates sleep duration.
- *
- * If the wake-up time is earlier than the bedtime,
- * the calculation automatically assumes the person
- * woke up on the following day.
- *
- * Example:
- * 23:00 -> 07:00 = 8 hours
- *
- * @param {string} bedtime - Bedtime in HH:MM format.
- * @param {string} wakeTime - Wake time in HH:MM format.
- * @returns {{totalMinutes: number, hours: number, minutes: number}}
- */
+//Calculate sleep duration (handles overnight sleep)
+
 function calculateSleepDuration(bedtime, wakeTime) {
   const bedtimeMinutes = timeToMinutes(bedtime);
   const wakeTimeMinutes = timeToMinutes(wakeTime);
 
   let totalMinutes = wakeTimeMinutes - bedtimeMinutes;
 
-  // Sleep continued into the next day.
+  // Sleep continued into the next day
   if (totalMinutes <= 0) {
     totalMinutes += 24 * 60;
   }
@@ -122,13 +76,9 @@ function calculateSleepDuration(bedtime, wakeTime) {
   };
 }
 
-/**
- * Formats the calculated duration for display.
- *
- * @param {number} hours - Number of hours.
- * @param {number} minutes - Number of minutes.
- * @returns {string} Formatted duration.
- */
+//Formats the calculated duration for display
+//hours/minutes into readable sting
+
 function formatDuration(hours, minutes) {
   const hourText = hours === 1 ? "hour" : "hours";
   const minuteText = minutes === 1 ? "min" : "mins";
@@ -136,16 +86,9 @@ function formatDuration(hours, minutes) {
   return `${hours} ${hourText} ${minutes} ${minuteText}`;
 }
 
-/* =========================================================
-   DATE / TIME FORMATTING
-   ========================================================= */
+//Date - time formatting
+// Converts a  H.M value to a 12-hour display format
 
-/**
- * Converts a HH:MM value to a 12-hour display format.
- *
- * @param {string} time - Time in HH:MM format.
- * @returns {string} Formatted time.
- */
 function formatTime(time) {
   const [hours, minutes] = time.split(":").map(Number);
 
@@ -155,12 +98,8 @@ function formatTime(time) {
   return `${displayHours}:${String(minutes).padStart(2, "0")} ${period}`;
 }
 
-/**
- * Formats an ISO date for the history display.
- *
- * @param {string} dateString - ISO date string.
- * @returns {string} Formatted date.
- */
+//Formats an ISO date for the history display
+
 function formatDate(dateString) {
   const date = new Date(dateString);
 
@@ -171,15 +110,9 @@ function formatDate(dateString) {
   });
 }
 
-/* =========================================================
-   UI: SLEEP RESULT
-   ========================================================= */
+//sleep result
+// Displays the calculated sleep duration.
 
-/**
- * Displays the calculated sleep duration.
- *
- * @param {Object} duration - Calculated duration.
- */
 function displaySleepResult(duration) {
   sleepHoursOutput.textContent = formatDuration(
     duration.hours,
@@ -190,9 +123,8 @@ function displaySleepResult(duration) {
   saveSleepButton.disabled = false;
 }
 
-/**
- * Resets the calculation result.
- */
+//Resets the calculation result
+
 function resetSleepResult() {
   currentSleepRecord = null;
 
@@ -200,13 +132,8 @@ function resetSleepResult() {
   saveSleepButton.disabled = true;
 }
 
-/* =========================================================
-   UI: EMPTY HISTORY
-   ========================================================= */
+//Displays the empty history state
 
-/**
- * Displays the empty history state.
- */
 function displayEmptyHistory() {
   historyList.innerHTML = `
     <div class="empty-state">
@@ -221,16 +148,8 @@ function displayEmptyHistory() {
   `;
 }
 
-/* =========================================================
-   UI: HISTORY
-   ========================================================= */
+//Creates the HTML for one sleep history record
 
-/**
- * Creates the HTML for one sleep history record.
- *
- * @param {Object} record - Sleep history record.
- * @returns {HTMLElement} History item.
- */
 function createHistoryItem(record) {
   const item = document.createElement("article");
 
@@ -274,8 +193,8 @@ function createHistoryItem(record) {
   return item;
 }
 
-// Renders all saved sleep records.
- 
+// Renders all saved sleep records
+
 function renderSleepHistory() {
   const history = getSleepHistory();
 
@@ -292,13 +211,9 @@ function renderSleepHistory() {
   });
 }
 
-/* =========================================================
-   SAVE SLEEP
-   ========================================================= */
+//SAVE SLEEP
+//Create and save the current sleep calculation
 
-/**
- * Creates and saves the current sleep calculation.
- */
 function saveSleepRecord() {
   if (!currentSleepRecord) {
     return;
@@ -312,23 +227,11 @@ function saveSleepRecord() {
 
   renderSleepHistory();
 
-  /*
-   * Reset the current calculation after saving so
-   * the user cannot accidentally save the same
-   * calculation repeatedly.
-   */
   resetSleepResult();
 }
 
-/* =========================================================
-   DELETE INDIVIDUAL RECORD
-   ========================================================= */
+//delete unique card
 
-/**
- * Deletes one sleep record using its unique ID.
- *
- * @param {string} recordId - ID of the record to delete.
- */
 function deleteSleepRecord(recordId) {
   const history = getSleepHistory();
 
@@ -339,13 +242,10 @@ function deleteSleepRecord(recordId) {
   renderSleepHistory();
 }
 
-/* =========================================================
-   CLEAR ALL HISTORY
-   ========================================================= */
+//Clear all history
 
-/**
- * Removes every saved sleep record.
- */
+//Removes every saved sleep record
+
 function clearAllHistory() {
   const history = getSleepHistory();
 
@@ -366,15 +266,8 @@ function clearAllHistory() {
   renderSleepHistory();
 }
 
-/* =========================================================
-   EVENT HANDLERS
-   ========================================================= */
+//Handles the sleep calculation form
 
-/**
- * Handles the sleep calculation form.
- *
- * @param {SubmitEvent} event - Form submit event.
- */
 function handleSleepCalculation(event) {
   event.preventDefault();
 
@@ -401,15 +294,8 @@ function handleSleepCalculation(event) {
   displaySleepResult(duration);
 }
 
-/**
- * Handles clicks on the history list.
- *
- * Event delegation allows dynamically generated
- * delete buttons to work without adding individual
- * event listeners to every record.
- *
- * @param {MouseEvent} event - Click event.
- */
+//Handles clicks on the history list
+
 function handleHistoryClick(event) {
   const deleteButton = event.target.closest(".sleep-history-delete");
 
@@ -424,13 +310,10 @@ function handleHistoryClick(event) {
   }
 }
 
-/* =========================================================
-   INITIALIZATION
-   ========================================================= */
+//INITIALIZATION
 
-/**
- * Initializes the sleep tracker.
- */
+//Initializes the sleep tracker
+
 function initSleep() {
   if (!sleepForm) {
     return;
@@ -446,10 +329,6 @@ function initSleep() {
 
   renderSleepHistory();
 }
-
-/* =========================================================
-   MODULE EXPORT
-   ========================================================= */
 
 export {
   initSleep,
